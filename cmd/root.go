@@ -38,6 +38,7 @@ var rootCmd = &cobra.Command{
 	Short: "A TUI Task Manager",
 	Long:  `A Vim-like TUI Task Manager with deep integration for so and so`,
 
+	// NOTE: The TUI application will eventually be ran from a call to the bare application
 
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
