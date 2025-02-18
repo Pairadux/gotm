@@ -75,13 +75,17 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
-		home, err := os.UserHomeDir()
+		// home, err := os.UserHomeDir()
+		// cobra.CheckErr(err)
+		// Find config directory.
+		config, err := os.UserConfigDir()
 		cobra.CheckErr(err)
 
 		// Search config in home directory with name ".gotm" (without extension).
-		viper.AddConfigPath(home)
+		// viper.AddConfigPath(home)
+		viper.AddConfigPath(config)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".gotm")
+		viper.SetConfigName("config")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
