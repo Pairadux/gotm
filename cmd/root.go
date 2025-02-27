@@ -30,22 +30,22 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
-
-var cfgFile string
 ) // }}}
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "gotm",
-	Short: "A TUI Task Manager",
-	Long:  `A Vim-like TUI Task Manager with deep integration for so and so`,
+var (
+	cfgFile   string
+	configDir string
 
-	// NOTE: The TUI application will eventually be ran from a call to the bare application
+	// rootCmd represents the base command when called without any subcommands
+	rootCmd = &cobra.Command{
+		Use:   "gotm",
+		Short: "A TUI Task Manager",
+		Long:  `A Vim-like TUI Task Manager with deep integration for so and so`,
 
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
-}
+		// NOTE: The TUI application will eventually be ran from a call to the bare application
+		// Run: func(cmd *cobra.Command, args []string) {},
+	}
+)
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
