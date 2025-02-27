@@ -26,6 +26,7 @@ func InitTasks() *models.TaskList {
 func AddTask(t *models.TaskList, desc string) {
 	t.Tasks = append(t.Tasks, models.Task{
 		Id:          FindFirstAvailableId(t),
+		Index:       0,
 		Created:     time.Now().Format(time.DateTime),
 		Description: desc,
 		Completed:   false,
