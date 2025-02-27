@@ -33,6 +33,7 @@ import (
 // removeCmd represents the remove command
 var removeCmd = &cobra.Command{
 	Use:   "remove",
+	Aliases: []string{"r"},
 	Short: "Remove a task from Gotm",
 	Long:  `Remove a task from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
