@@ -26,10 +26,10 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-)
 ) // }}}
 
 var (
@@ -76,25 +76,45 @@ func initConfig() { // {{{
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		// home, err := os.UserHomeDir()
-		// cobra.CheckErr(err)
-		// Find config directory.
-		config, err := os.UserConfigDir()
-		cobra.CheckErr(err)
+		configDir := "/Users/austingause/.config/"
+		appConfigDir := filepath.Join(configDir, "gotm")
 
-		// Search config in home directory with name ".gotm" (without extension).
-		// viper.AddConfigPath(home)
-		viper.AddConfigPath(config)
+		dataDir := "/Users/austingause/.local/share/"
+		appDataDir := filepath.Join(dataDir, "gotm")
+
+		if _, err := os.Stat(appConfigDir); os.IsNotExist(err) {
+			cobra.CheckErr(os.MkdirAll(appConfigDir, 0o755))
+		}
+
+		if _, err := os.Stat(appDataDir); os.IsNotExist(err) {
+			cobra.CheckErr(os.MkdirAll(appDataDir, 0o755))
+		}
+
+		viper.AddConfigPath(appConfigDir)
+		viper.AddConfigPath(".")
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("config")
+
+		defaultJSONPath := filepath.Join(appDataDir, "tasks.json")
+		viper.SetDefault("json_path", defaultJSONPath)
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			if cfgFile == "" {
+				configFilePath := filepath.Join("/Users/austingause/.config/", "gotm", "config.yaml")
+
+				fmt.Println("Config file not found, creating default config file...")
+				cobra.CheckErr(viper.SafeWriteConfigAs(configFilePath))
+				fmt.Printf("Created default config file at: %s\n", configFilePath)
+
+				cobra.CheckErr(viper.ReadInConfig())
+			}
+		} else {
+			cobra.CheckErr(err)
+		}
 	}
-}
+	fmt.Printf("Using config file: %s\n\n", viper.ConfigFileUsed())
 } // }}}
