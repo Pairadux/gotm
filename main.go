@@ -1,4 +1,4 @@
-/*{{{
+/* LICENSE {{{
 Copyright © 2025 Austin Gause <a.gause@outlook.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

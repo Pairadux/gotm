@@ -1,9 +1,11 @@
 package tasks
 
 import "fmt"
+// IMPORTS {{{
 
 type Task struct {
 	Description string
+) // }}}
 }
 
 type Tasks struct {

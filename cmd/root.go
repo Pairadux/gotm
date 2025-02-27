@@ -1,4 +1,4 @@
-/*{{{
+/* LICENSE {{{
 Copyright © 2025 Austin Gause <a.gause@outlook.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,6 +22,7 @@ THE SOFTWARE.
 
 package cmd
 
+// IMPORTS {{{
 import (
 	"fmt"
 	"os"
@@ -31,6 +32,7 @@ import (
 )
 
 var cfgFile string
+) // }}}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -47,14 +49,14 @@ var rootCmd = &cobra.Command{
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
+func Execute() { // {{{
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
-}
+} // }}}
 
-func init() {
+func init() { // {{{
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
@@ -66,10 +68,10 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
+} // }}}
 
 // initConfig reads in config file and ENV variables if set.
-func initConfig() {
+func initConfig() { // {{{
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
@@ -95,3 +97,4 @@ func initConfig() {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
 }
+} // }}}

@@ -1,4 +1,4 @@
-/*{{{
+/* LICENSE {{{ 
 Copyright © 2025 Austin Gause <a.gause@outlook.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,11 +22,13 @@ THE SOFTWARE.
 
 package cmd
 
+// IMPORTS {{{
 import (
 	"fmt"
 
 	"github.com/spf13/cobra"
 )
+) // }}}
 
 // removeCmd represents the remove command
 var removeCmd = &cobra.Command{
@@ -38,7 +40,7 @@ var removeCmd = &cobra.Command{
 	},
 }
 
-func init() {
+func init() { // {{{
 	rootCmd.AddCommand(removeCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -50,4 +52,4 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// removeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
+} // }}}
