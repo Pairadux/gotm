@@ -25,8 +25,8 @@ func InitTasks() *models.TaskList {
 
 func AddTask(t *models.TaskList, desc string) {
 	t.Tasks = append(t.Tasks, models.Task{
-		Id:          FindFirstAvailableId(t),
 		Index:       0,
+		Id:          AssignId(t),
 		Created:     time.Now().Format(time.DateTime),
 		Description: desc,
 		Completed:   false,
@@ -61,9 +61,11 @@ func SortTasks(sortType string, t *models.TaskList) {
 			return a.Id - b.Id
 		})
 	}
+	for i, e := range t.Tasks {
+	}
 }
 
-func FindFirstAvailableId(t *models.TaskList) int {
+func AssignId(t *models.TaskList) int {
 	// n := 1
 	SortTasks("id-asc", t)
 	// for i, e := range t.Tasks {
