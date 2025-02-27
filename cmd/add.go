@@ -46,10 +46,10 @@ var addCmd = &cobra.Command{
 		t := tasks.InitTasks()
 
 		if len(args) != 0 {
-			tasks.AddTask(tm, strings.Join(args, " "))
+			tasks.AddTask(t, strings.Join(args, " "))
 		}
 
-		storage.SaveTasksToFile(viper.GetString("json_path"), tm)
+		storage.SaveTasksToFile(viper.GetString("json_path"), t)
 		fmt.Println("Tasks saved to json file:", viper.GetString("json_path"))
 	},
 }

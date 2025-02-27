@@ -45,10 +45,10 @@ func LoadTasks() (*models.TaskList, error) {
 		return nil, err
 	}
 
-	tasks := models.TaskList{}
-	if err := json.Unmarshal(data, &tasks); err != nil {
+	t := models.TaskList{}
+	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
 
-	return &tasks, nil
+	return &t, nil
 }

@@ -42,10 +42,9 @@ var removeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("remove called")
 
-		// tm, err := storage.LoadTasks()
-		// if err != nil {
-		// 	panic(err)
-		// }
+		t := tasks.InitTasks()
+
+		fmt.Println(t)
 
 		if len(args) != 0 {
 			tasks.RemoveTask()

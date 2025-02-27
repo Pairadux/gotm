@@ -39,25 +39,26 @@ var listCmd = &cobra.Command{
 	Short:   "List items",
 	Long:    `List Items`,
 	Run: func(cmd *cobra.Command, args []string) {
-		tm, err := storage.LoadTasks()
+
+		t, err := storage.LoadTasks()
 		if err != nil {
 			panic(err)
 		}
 
-		tasks.AddTask(tm, "This is task 1")
-		tasks.AddTask(tm, "This is task 2")
-		tasks.AddTask(tm, "This is task 3")
-		tasks.AddTask(tm, "This is task 4")
+		tasks.AddTask(t, "This is task 1")
+		tasks.AddTask(t, "This is task 2")
+		tasks.AddTask(t, "This is task 3")
+		tasks.AddTask(t, "This is task 4")
 
 		fmt.Printf("INDEX\t| ID\t| Description\n")
-		for i, e := range(tm.Tasks) {
+		for i, e := range(t.Tasks) {
 			fmt.Printf("%d\t  %d\t  %s\n", i, e.Id, e.Description)
 		}
 
-		tasks.FindFirstAvailableId(tm)
+		tasks.SortTasks("id-asc", t)
 
 		fmt.Printf("INDEX\t| ID\t| Description\n")
-		for i, e := range(tm.Tasks) {
+		for i, e := range(t.Tasks) {
 			fmt.Printf("%d\t  %d\t  %s\n", i, e.Id, e.Description)
 		}
 	},
