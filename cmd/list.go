@@ -46,11 +46,6 @@ var listCmd = &cobra.Command{
 			panic(err)
 		}
 
-		tasks.AddTask(t, "This is task 1")
-		tasks.AddTask(t, "This is task 2")
-		tasks.AddTask(t, "This is task 3")
-		tasks.AddTask(t, "This is task 4")
-
 		fmt.Printf("INDEX\t| ID\t| Description\n")
 		for i, e := range(t.Tasks) {
 			fmt.Printf("%d\t  %d\t  %s\n", i, e.Id, e.Description)
