@@ -43,10 +43,7 @@ var addCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("add called")
 
-		tm, err := storage.LoadTasks()
-		if err != nil {
-			panic(err)
-		}
+		t := tasks.InitTasks()
 
 		if len(args) != 0 {
 			tasks.AddTask(tm, strings.Join(args, " "))

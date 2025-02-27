@@ -15,9 +15,12 @@ import (
 	// "github.com/spf13/viper"
 ) // }}}
 
-// TODO: flesh out this method
-func InitTasks() {
-	storage.LoadTasks()
+func InitTasks() *models.TaskList {
+	t, err := storage.LoadTasks()
+	if err != nil {
+		panic(err)
+	}
+	return t
 }
 
 func AddTask(t *models.TaskList, desc string) {
