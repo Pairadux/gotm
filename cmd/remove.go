@@ -26,8 +26,11 @@ package cmd
 import (
 	"fmt"
 
+	// "github.com/Pairadux/gotm/internal/storage"
+	"github.com/Pairadux/gotm/internal/tasks"
+
 	"github.com/spf13/cobra"
-)
+	// "github.com/spf13/viper"
 ) // }}}
 
 // removeCmd represents the remove command
@@ -38,6 +41,18 @@ var removeCmd = &cobra.Command{
 	Long:  `Remove a task from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("remove called")
+
+		// tm, err := storage.LoadTasks()
+		// if err != nil {
+		// 	panic(err)
+		// }
+
+		if len(args) != 0 {
+			tasks.RemoveTask()
+		}
+
+		// storage.SaveTasksToFile(viper.GetString("json_path"), tm)
+		// fmt.Println("Tasks saved to json file:", viper.GetString("json_path"))
 	},
 }
 
