@@ -1,4 +1,4 @@
-/* LICENSE {{{ 
+/* LICENSE {{{
 Copyright © 2025 Austin Gause <a.gause@outlook.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,10 +35,10 @@ import (
 
 // removeCmd represents the remove command
 var removeCmd = &cobra.Command{
-	Use:   "remove",
+	Use:     "remove",
 	Aliases: []string{"r"},
-	Short: "Remove a task from Gotm",
-	Long:  `Remove a task from Gotm with some other information listed as well`,
+	Short:   "Remove a task from Gotm",
+	Long:    `Remove a task from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("remove called")
 

@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 package cmd
 
-// IMPORTS{{{
+// IMPORTS {{{
 import (
 	"fmt"
 	"strings"

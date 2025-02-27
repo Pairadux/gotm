@@ -36,9 +36,10 @@ import (
 var listCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"l"},
-	Short:   "List items",
-	Long:    `List Items`,
+	Short:   "List items from Gotm",
+	Long:    `List Items from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("list called")
 
 		t, err := storage.LoadTasks()
 		if err != nil {
