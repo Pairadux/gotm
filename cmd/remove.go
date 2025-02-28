@@ -55,7 +55,7 @@ var removeCmd = &cobra.Command{
 		}
 
 		if len(args) != 0 {
-			tasks.RemoveTask()
+			tasks.Remove()
 		}
 
 		// storage.SaveTasksToFile(viper.GetString("json_path"), tm)

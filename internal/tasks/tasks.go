@@ -36,7 +36,7 @@ func InitWorkspaces() map[string]*models.Workspace {
 	return workspaces
 }
 
-func AddTask(workspaces map[string]*models.Workspace, workspace string, desc string) {
+func Add(workspaces map[string]*models.Workspace, workspace string, desc string) {
 	workspaces[workspace].Tasks = append(workspaces[workspace].Tasks, models.Task{
 		Index:       0,
 		// Id:          AssignId(t),
@@ -47,7 +47,7 @@ func AddTask(workspaces map[string]*models.Workspace, workspace string, desc str
 }
 
 // TODO: Implement this method
-func RemoveTask( /*t *models.TaskList, id int*/ ) {
+func Remove( /*t *models.TaskList, id int*/ ) {
 	fmt.Println("Task Removed")
 }
 

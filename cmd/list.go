@@ -54,10 +54,12 @@ var listCmd = &cobra.Command{
 
 		fmt.Printf("Using workspace: %s\n\n", workspace)
 
+		ts := workspaces[workspace].Tasks
+
 		if len(args) > 0 {
-			tasks.SortTasks(args[0], workspaces, workspace)
+			tasks.Sort(args[0], ts)
 		} else {
-			tasks.SortTasks("id-asc", workspaces, workspace)
+			tasks.Sort("natural", ts)
 
 		}
 
