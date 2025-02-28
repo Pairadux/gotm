@@ -26,7 +26,6 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/tasks"
 
 	"github.com/spf13/cobra"
@@ -42,10 +41,7 @@ var removeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("remove called")
 
-		workspaces, err := storage.LoadWorkspaces()
-		if err != nil {
-			panic(err)
-		}
+		workspaces := tasks.InitWorkspaces()
 
 		workspace := ""
 		if cmd.Flags().Changed("workspace") {

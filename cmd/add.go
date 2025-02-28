@@ -43,10 +43,7 @@ var addCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("add called\n\n")
 
-		workspaces, err := storage.LoadWorkspaces()
-		if err != nil {
-			panic(err)
-		}
+		workspaces := tasks.InitWorkspaces()
 
 		workspace := ""
 		if cmd.Flags().Changed("workspace") {
