@@ -11,14 +11,6 @@ import (
 	"github.com/spf13/viper"
 ) // }}}
 
-func PrintJson(workspaces map[string]*models.Workspace) {
-	data, err := json.MarshalIndent(workspaces, "", " ")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(data))
-}
-
 func ToJson(workspaces map[string]*models.Workspace) []byte {
 	data, err := json.Marshal(workspaces)
 	if err != nil {
