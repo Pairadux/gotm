@@ -63,9 +63,9 @@ var listCmd = &cobra.Command{
 
 		}
 
-		fmt.Printf("INDEX\t| ID\t| Description\n")
+		fmt.Printf("Index\t| Description\t| Created\n")
 		for _, e := range(workspaces[workspace].Tasks) {
-			fmt.Printf("%d\t %s\n", e.Index, e.Description)
+			fmt.Printf("%d\t  %s\t  %s\n", e.Index, e.Description, e.Created)
 		}
 
 		storage.SaveTasksToFile(viper.GetString("json_path"), workspaces)
