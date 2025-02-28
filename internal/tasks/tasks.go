@@ -3,7 +3,6 @@ package tasks
 // IMPORTS {{{
 import (
 	"fmt"
-	"slices"
 	"strings"
 	"time"
 
@@ -12,7 +11,8 @@ import (
 
 	"github.com/Pairadux/gotm/internal/models"
 	"github.com/Pairadux/gotm/internal/storage"
-	"github.com/facette/natsort"
+	"github.com/Pairadux/gotm/internal/utility"
+
 	"github.com/spf13/viper"
 ) // }}}
 
@@ -51,41 +51,18 @@ func RemoveTask( /*t *models.TaskList, id int*/ ) {
 	fmt.Println("Task Removed")
 }
 
-func SortTasks(sortType string, workspaces map[string]*models.Workspace, workspace string) {
+func Sort(sortType string, ts []models.Task) {
 	switch sortType {
 	case "natural", "nat":
 		fmt.Printf("Sorting with: natural sort\n\n")
-		slices.SortFunc(workspaces[workspace].Tasks, func(a, b models.Task) int {
-			if natsort.Compare(a.Description, b.Description) {
-				return -1
-			}
-			if natsort.Compare(b.Description, a.Description) {
-				return 1
-			}
-			return 0
-		})
-
-	// case "id-asc":
-	// 	fmt.Printf("Sorting with: id-asc sort\n\n")
-	// 	slices.SortFunc(t.Tasks, func(a, b models.Task) int {
-	// 		return a.Id - b.Id
-	// 	})
-
+		utility.NaturalSort(ts)
 	default:
 		fmt.Printf("Sort method: %s does not exist. Sorting with: natural sort\n\n", sortType)
-		slices.SortFunc(workspaces[workspace].Tasks, func(a, b models.Task) int {
-			if natsort.Compare(a.Description, b.Description) {
-				return -1
-			}
-			if natsort.Compare(b.Description, a.Description) {
-				return 1
-			}
-			return 0
-		})
+		utility.NaturalSort(ts)
 	}
 
-	for i := range workspaces[workspace].Tasks {
-		workspaces[workspace].Tasks[i].Index = i + 1
+	for i := range ts {
+		ts[i].Index = i + 1
 	}
 }
 
