@@ -50,7 +50,7 @@ var removeCmd = &cobra.Command{
 			workspace = viper.GetString("default_workspace")
 		}
 
-		for _, e := range(workspaces[workspace].Tasks) {
+		for _, e := range workspaces[workspace].Tasks {
 			fmt.Printf("%d\t %s\n", e.Index, e.Description)
 		}
 

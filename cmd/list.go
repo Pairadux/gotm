@@ -60,11 +60,10 @@ var listCmd = &cobra.Command{
 			tasks.Sort(args[0], ts)
 		} else {
 			tasks.Sort("natural", ts)
-
 		}
 
 		fmt.Printf("Index\t| Description\t| Created\n")
-		for _, e := range(ts) {
+		for _, e := range ts {
 			fmt.Printf("%d\t  %s\t  %s\n", e.Index, e.Description, e.Created.Format(time.DateTime))
 		}
 
