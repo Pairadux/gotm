@@ -30,6 +30,7 @@ import (
 	"github.com/Pairadux/gotm/internal/tasks"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 ) // }}}
 
 // listCmd represents the list command
@@ -39,24 +40,36 @@ var listCmd = &cobra.Command{
 	Short:   "List items from Gotm",
 	Long:    `List Items from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+		fmt.Printf("list called\n\n")
 
-		t, err := storage.LoadTasks()
+		workspaces, err := storage.LoadWorkspaces()
 		if err != nil {
 			panic(err)
 		}
 
-		fmt.Printf("INDEX\t| ID\t| Description\n")
-		for i, e := range(t.Tasks) {
-			fmt.Printf("%d\t  %d\t  %s\n", i, e.Id, e.Description)
+		workspace := ""
+		if cmd.Flags().Changed("workspace") {
+			workspace = cmd.Flag("workspace").Value.String()
+		} else {
+			workspace = viper.GetString("default_workspace")
 		}
 
-		tasks.SortTasks("id-asc", t)
+		fmt.Printf("Using workspace: %s\n\n", workspace)
+
+		if len(args) > 0 {
+			tasks.SortTasks(args[0], workspaces, workspace)
+		} else {
+			tasks.SortTasks("id-asc", workspaces, workspace)
+
+		}
 
 		fmt.Printf("INDEX\t| ID\t| Description\n")
-		for i, e := range(t.Tasks) {
-			fmt.Printf("%d\t  %d\t  %s\n", i, e.Id, e.Description)
+		for _, e := range(workspaces[workspace].Tasks) {
+			fmt.Printf("%d\t %s\n", e.Index, e.Description)
 		}
+
+		storage.SaveTasksToFile(viper.GetString("json_path"), workspaces)
+		fmt.Println("\nTasks saved to json file:", viper.GetString("json_path"))
 	},
 }
 

@@ -34,7 +34,7 @@ import (
 
 var (
 	cfgFile   string
-	configDir string
+	workspace string
 
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd = &cobra.Command{
@@ -63,6 +63,7 @@ func init() { // {{{
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gotm.yaml)")
+	rootCmd.PersistentFlags().StringVar(&workspace, "workspace", "", "workspace to use (default is inbox)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -71,16 +72,17 @@ func init() { // {{{
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() { // {{{
+
+	dataDir := "/Users/austingause/.local/share/"
+	appDataDir := filepath.Join(dataDir, "gotm")
+
+	configDir := "/Users/austingause/.config/"
+	appConfigDir := filepath.Join(configDir, "gotm")
+
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		configDir := "/Users/austingause/.config/"
-		appConfigDir := filepath.Join(configDir, "gotm")
-
-		dataDir := "/Users/austingause/.local/share/"
-		appDataDir := filepath.Join(dataDir, "gotm")
-
 		if _, err := os.Stat(appConfigDir); os.IsNotExist(err) {
 			cobra.CheckErr(os.MkdirAll(appConfigDir, 0o755))
 		}
@@ -93,17 +95,18 @@ func initConfig() { // {{{
 		viper.AddConfigPath(".")
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("config")
-
-		defaultJSONPath := filepath.Join(appDataDir, "tasks.json")
-		viper.SetDefault("json_path", defaultJSONPath)
 	}
+
+	defaultJSONPath := filepath.Join(appDataDir, "tasks.json")
+	viper.SetDefault("json_path", defaultJSONPath)
+	viper.SetDefault("default_workspace", "inbox")
 
 	viper.AutomaticEnv() // read in environment variables that match
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			if cfgFile == "" {
-				configFilePath := filepath.Join("/Users/austingause/.config/", "gotm", "config.yaml")
+				configFilePath := filepath.Join(appConfigDir, "config.yaml")
 
 				fmt.Println("Config file not found, creating default config file...")
 				cobra.CheckErr(viper.SafeWriteConfigAs(configFilePath))

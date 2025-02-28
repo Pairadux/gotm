@@ -11,28 +11,32 @@ import (
 	"github.com/spf13/viper"
 ) // }}}
 
-func PrintJson(allTasks *models.TaskList) {
-	data, err := json.MarshalIndent(allTasks, "", " ")
+func PrintJson(workspaces map[string]*models.Workspace) {
+	data, err := json.MarshalIndent(workspaces, "", " ")
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(string(data))
 }
 
-func ToJson(allTasks *models.TaskList) []byte {
-	data, err := json.Marshal(allTasks)
+func ToJson(workspaces map[string]*models.Workspace) []byte {
+	data, err := json.Marshal(workspaces)
 	if err != nil {
 		panic(err)
 	}
 	return data
 }
 
-func SaveTasksToFile(filename string, allTasks *models.TaskList) error {
-	return os.WriteFile(filename, ToJson(allTasks), 0o644)
+func SaveTasksToFile(filename string, workspaces map[string]*models.Workspace) error {
+	return os.WriteFile(filename, ToJson(workspaces), 0o644)
 }
 
-func LoadTasks() (*models.TaskList, error) {
+func LoadWorkspaces() (map[string]*models.Workspace, error) {
 	filename := viper.GetString("json_path")
+
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		return make(map[string]*models.Workspace), nil
+	}
 
 	file, err := os.Open(filename)
 	if err != nil {
@@ -45,10 +49,10 @@ func LoadTasks() (*models.TaskList, error) {
 		return nil, err
 	}
 
-	t := models.TaskList{}
-	if err := json.Unmarshal(data, &t); err != nil {
+	var workspaces map[string]*models.Workspace
+	if err := json.Unmarshal(data, &workspaces); err != nil {
 		return nil, err
 	}
 
-	return &t, nil
+	return workspaces, nil
 }

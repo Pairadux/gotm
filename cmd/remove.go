@@ -26,11 +26,11 @@ package cmd
 import (
 	"fmt"
 
-	// "github.com/Pairadux/gotm/internal/storage"
+	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/tasks"
 
 	"github.com/spf13/cobra"
-	// "github.com/spf13/viper"
+	"github.com/spf13/viper"
 ) // }}}
 
 // removeCmd represents the remove command
@@ -42,9 +42,21 @@ var removeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("remove called")
 
-		t := tasks.InitTasks()
+		workspaces, err := storage.LoadWorkspaces()
+		if err != nil {
+			panic(err)
+		}
 
-		fmt.Println(t)
+		workspace := ""
+		if cmd.Flags().Changed("workspace") {
+			workspace = viper.GetString("workspace")
+		} else {
+			workspace = viper.GetString("default_workspace")
+		}
+
+		for _, e := range(workspaces[workspace].Tasks) {
+			fmt.Printf("%d\t %s\n", e.Index, e.Description)
+		}
 
 		if len(args) != 0 {
 			tasks.RemoveTask()

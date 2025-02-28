@@ -41,15 +41,25 @@ var addCmd = &cobra.Command{
 	Short:   "Add a task to Gotm",
 	Long:    `Add a task to Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("add called")
+		fmt.Printf("add called\n\n")
 
-		t := tasks.InitTasks()
-
-		if len(args) != 0 {
-			tasks.AddTask(t, strings.Join(args, " "))
+		workspaces, err := storage.LoadWorkspaces()
+		if err != nil {
+			panic(err)
 		}
 
-		storage.SaveTasksToFile(viper.GetString("json_path"), t)
+		workspace := ""
+		if cmd.Flags().Changed("workspace") {
+			workspace = viper.GetString("workspace")
+		} else {
+			workspace = viper.GetString("default_workspace")
+		}
+
+		if len(args) != 0 {
+			tasks.AddTask(workspaces, workspace, strings.Join(args, " "))
+		}
+
+		storage.SaveTasksToFile(viper.GetString("json_path"), workspaces)
 		fmt.Println("Tasks saved to json file:", viper.GetString("json_path"))
 	},
 }
