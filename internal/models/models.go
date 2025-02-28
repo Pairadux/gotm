@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 // Workspace Struct
 type Workspace struct {
 	Tasks []Task `json:"tasks"`
@@ -7,8 +9,8 @@ type Workspace struct {
 
 // Task Struct
 type Task struct {
-	Index       int    `json:"index"`
-	Created     string `json:"created"`
-	Description string `json:"description"`
-	Completed   bool   `json:"completed"`
+	Index       int       `json:"index"`
+	Created     time.Time `json:"created"`
+	Description string    `json:"description"`
+	Completed   bool      `json:"completed"`
 }

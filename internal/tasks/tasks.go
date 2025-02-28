@@ -40,7 +40,7 @@ func AddTask(workspaces map[string]*models.Workspace, workspace string, desc str
 	workspaces[workspace].Tasks = append(workspaces[workspace].Tasks, models.Task{
 		Index:       0,
 		// Id:          AssignId(t),
-		Created:     time.Now().Format(time.DateTime),
+		Created:     time.Now(),
 		Description: strings.TrimSpace(desc),
 		Completed:   false,
 	})

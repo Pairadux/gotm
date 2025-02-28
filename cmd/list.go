@@ -25,6 +25,7 @@ package cmd
 // IMPORTS {{{
 import (
 	"fmt"
+	"time"
 
 	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/tasks"
@@ -61,8 +62,8 @@ var listCmd = &cobra.Command{
 		}
 
 		fmt.Printf("Index\t| Description\t| Created\n")
-		for _, e := range(workspaces[workspace].Tasks) {
-			fmt.Printf("%d\t  %s\t  %s\n", e.Index, e.Description, e.Created)
+		for _, e := range(ts) {
+			fmt.Printf("%d\t  %s\t  %s\n", e.Index, e.Description, e.Created.Format(time.DateTime))
 		}
 
 		storage.SaveTasksToFile(viper.GetString("json_path"), workspaces)
