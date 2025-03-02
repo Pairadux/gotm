@@ -30,9 +30,9 @@ import (
 
 	"github.com/Pairadux/gotm/internal/tui"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	tea "github.com/charmbracelet/bubbletea"
 ) // }}}
 
 var (
@@ -46,6 +46,17 @@ var (
 		Long:  `A Vim-like TUI Task Manager with deep integration for so and so`,
 
 		Run: func(cmd *cobra.Command, args []string) {
+			// DEBUGGING
+			if len(os.Getenv("DEBUG")) > 0 {
+				f, err := tea.LogToFile("debug.log", "debug")
+				if err != nil {
+					fmt.Println("fatal:", err)
+					os.Exit(1)
+				}
+				defer f.Close()
+			}
+
+			// TUI PROGRAM
 			p := tea.NewProgram(tui.InitModel())
 			if _, err := p.Run(); err != nil {
 				fmt.Printf("Alas, there's been an error: %v", err)
