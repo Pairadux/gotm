@@ -47,7 +47,7 @@ var addCmd = &cobra.Command{
 
 		workspace := ""
 		if cmd.Flags().Changed("workspace") {
-			workspace = viper.GetString("workspace")
+			workspace = cmd.Flag("workspace").Value.String()
 		} else {
 			workspace = viper.GetString("default_workspace")
 		}

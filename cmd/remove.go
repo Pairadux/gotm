@@ -39,13 +39,13 @@ var removeCmd = &cobra.Command{
 	Short:   "Remove a task from Gotm",
 	Long:    `Remove a task from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("remove called")
+		fmt.Printf("remove called\n\n")
 
 		workspaces := tasks.InitWorkspaces()
 
 		workspace := ""
 		if cmd.Flags().Changed("workspace") {
-			workspace = viper.GetString("workspace")
+			workspace = cmd.Flag("workspace").Value.String()
 		} else {
 			workspace = viper.GetString("default_workspace")
 		}
