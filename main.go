@@ -22,9 +22,7 @@ THE SOFTWARE.
 
 package main
 
-import (
-	"github.com/Pairadux/gotm/cmd"
-)
+import "github.com/Pairadux/gotm/cmd"
 
 func main() {
 	cmd.Execute()

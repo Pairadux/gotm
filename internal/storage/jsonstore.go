@@ -25,7 +25,6 @@ package storage
 // IMPORTS {{{
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 
