@@ -29,7 +29,6 @@ import (
 	"github.com/Pairadux/gotm/internal/tasks"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 ) // }}}
 
 // removeCmd represents the remove command
@@ -43,12 +42,7 @@ var removeCmd = &cobra.Command{
 
 		workspaces := tasks.InitWorkspaces()
 
-		workspace := ""
-		if cmd.Flags().Changed("workspace") {
-			workspace = cmd.Flag("workspace").Value.String()
-		} else {
-			workspace = viper.GetString("default_workspace")
-		}
+		workspace := resolveWorkspace(cmd)
 
 		for _, e := range workspaces[workspace].Tasks {
 			fmt.Printf("%d\t %s\n", e.Index, e.Description)

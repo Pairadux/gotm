@@ -46,12 +46,7 @@ var listCmd = &cobra.Command{
 
 		workspaces := tasks.InitWorkspaces()
 
-		workspace := ""
-		if cmd.Flags().Changed("workspace") {
-			workspace = cmd.Flag("workspace").Value.String()
-		} else {
-			workspace = viper.GetString("default_workspace")
-		}
+		workspace := resolveWorkspace(cmd)
 
 		debugMessage(fmt.Sprintf("Using workspace: %s\n\n", workspace))
 
