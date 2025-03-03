@@ -103,7 +103,9 @@ func (m model) View() string {
 		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice.Description)
 	}
 
-	s += "\n press q to quit.\n"
+	s += "\npress a to add.\n"
+	s += "press r to remove.\n"
+	s += "press q to quit.\n"
 
 	return s
 }
