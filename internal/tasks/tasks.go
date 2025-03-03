@@ -76,7 +76,7 @@ func Remove( /*t *models.TaskList, id int*/ ) {
 func Sort(sortType string, ts []models.Task) {
 	switch sortType {
 	case "natural", "nat":
-		fmt.Printf("Sorting with: natural sort\n\n")
+		// fmt.Printf("Sorting with: natural sort\n\n")
 		utility.NaturalSort(ts)
 	default:
 		fmt.Printf("Sort method: %s does not exist. Sorting with: natural sort\n\n", sortType)

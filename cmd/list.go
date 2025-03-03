@@ -73,6 +73,9 @@ func init() { // {{{
 
 	// Here you will define your flags and configuration settings.
 
+	// NOTE: Possibly add sorting method as a flag rather than argument
+	// This would allow the argument to be the workspace used, but thats also already a flag, so some more thought has to be put into this
+
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// listCmd.PersistentFlags().String("foo", "", "A help for foo")

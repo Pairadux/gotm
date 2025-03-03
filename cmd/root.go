@@ -119,6 +119,7 @@ func initConfig() { // {{{
 	defaultJSONPath := filepath.Join(appDataDir, "tasks.json")
 	viper.SetDefault("json_path", defaultJSONPath)
 	viper.SetDefault("default_workspace", "inbox")
+	// TODO: Add option for default sorting method
 
 	viper.AutomaticEnv() // read in environment variables that match
 
