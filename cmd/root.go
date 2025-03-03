@@ -92,11 +92,12 @@ func init() { // {{{
 // initConfig reads in config file and ENV variables if set.
 func initConfig() { // {{{
 
-	dataDir := "/Users/austingause/.local/share/"
-	appDataDir := filepath.Join(dataDir, "gotm")
+	homeDir, err := os.UserHomeDir()
+	cobra.CheckErr(err)
 
-	configDir := "/Users/austingause/.config/"
-	appConfigDir := filepath.Join(configDir, "gotm")
+	appDataDir := filepath.Join(homeDir, ".local/share", "gotm")
+
+	appConfigDir := filepath.Join(homeDir, ".config", "gotm")
 
 	if cfgFile != "" {
 		// Use config file from the flag.
