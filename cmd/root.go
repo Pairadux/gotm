@@ -137,5 +137,5 @@ func initConfig() { // {{{
 			cobra.CheckErr(err)
 		}
 	}
-	fmt.Printf("Using config file: %s\n\n", viper.ConfigFileUsed())
+	debugMessage(fmt.Sprintf("Using config file: %s\n\n", viper.ConfigFileUsed()))
 } // }}}
