@@ -22,21 +22,27 @@ THE SOFTWARE.
 
 package tui
 
+// IMPORTS {{{
 import (
 	"fmt"
 
+	"github.com/Pairadux/gotm/internal/models"
+	"github.com/Pairadux/gotm/internal/tasks"
+
 	tea "github.com/charmbracelet/bubbletea"
-)
+) // }}}
 
 type model struct {
-	choices []string
-	cursor int
+	choices  []models.Task
+	cursor   int
 	selected map[int]struct{}
 }
 
-func InitModel() model {
-	return model {
-		choices: []string{"Buy carrots", "Buy celery", "Buy kohlrabi"},
+func InitModel(workspace string) model {
+	workspaces := tasks.InitWorkspaces()
+
+	return model{
+		choices: workspaces[workspace].Tasks,
 
 		selected: make(map[int]struct{}),
 	}
@@ -48,7 +54,6 @@ func (m model) Init() tea.Cmd {
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-
 	case tea.KeyMsg:
 
 		switch msg.String() {
@@ -75,15 +80,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 		}
-
 	}
 
 	return m, nil
 }
 
 func (m model) View() string {
-	
-	s := "What should we buy at the market?\n\n"
+	s := "GOTM Task Manager\n\n"
 
 	for i, choice := range m.choices {
 
@@ -97,7 +100,7 @@ func (m model) View() string {
 			checked = "x"
 		}
 
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice)
+		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice.Description)
 	}
 
 	s += "\n press q to quit.\n"
