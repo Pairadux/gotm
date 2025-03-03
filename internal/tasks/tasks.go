@@ -61,7 +61,6 @@ func InitWorkspaces() map[string]*models.Workspace {
 func Add(workspaces map[string]*models.Workspace, workspace string, desc string) {
 	workspaces[workspace].Tasks = append(workspaces[workspace].Tasks, models.Task{
 		Index:       0,
-		// Id:          AssignId(t),
 		Created:     time.Now(),
 		Description: strings.TrimSpace(desc),
 		Completed:   false,
