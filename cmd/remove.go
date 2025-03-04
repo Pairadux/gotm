@@ -38,7 +38,7 @@ var removeCmd = &cobra.Command{
 	Short:   "Remove a task from Gotm",
 	Long:    `Remove a task from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("remove called\n\n")
+		debugMessage(fmt.Sprintf("remove called\n\n"))
 
 		workspaces := taskops.InitWorkspaces()
 
