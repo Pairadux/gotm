@@ -18,33 +18,60 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-*/// }}}
+*/ // }}}
 
 package cmd
 
 // IMPORTS {{{
 import (
 	"fmt"
+	"strconv"
+
+	"github.com/Pairadux/gotm/internal/taskops"
+	"github.com/Pairadux/gotm/internal/storage"
 
 	"github.com/spf13/cobra"
-)// }}}
+	"github.com/spf13/viper"
+) // }}}
 
 // completeCmd represents the complete command
 var completeCmd = &cobra.Command{
-	Use:   "complete",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:     "complete",
+	Aliases: []string{"c"},
+	Short:   "Mark a task as completed in Gotm",
+	Long:    `Mark a task as completed in Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("complete called")
+		debugMessage(fmt.Sprintf("Remove called"))
+
+		if len(args) == 0 {
+			_ = cmd.Help()
+			return
+		}
+
+		active := taskops.InitActive()
+		workspace := resolveWorkspace(cmd)
+
+		found := false
+
+		i, err := strconv.Atoi(args[0])
+		if err != nil {
+			panic(err)
+		}
+
+		found = taskops.Complete(&active[workspace].Tasks, i)
+		if !found {
+			fmt.Printf("Task with index %d does not exist.\n", i)
+		}
+
+		storage.SaveTasksToFile(viper.GetString("active_path"), active)
+		debugMessage(fmt.Sprintf("Active tasks saved to json file: %s", viper.GetString("active_path")))
+
+		// storage.SaveTasksToFile(viper.GetString("completed_path"), )
+		// debugMessage(fmt.Sprintf("Completed tasks saved to json file: %s", viper.GetString("completed_path")))
 	},
 }
 
-func init() {// {{{
+func init() { // {{{
 	rootCmd.AddCommand(completeCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -56,4 +83,4 @@ func init() {// {{{
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// completeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}// }}}
+} // }}}
