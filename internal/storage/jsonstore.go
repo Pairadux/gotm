@@ -44,9 +44,7 @@ func SaveTasksToFile(filename string, workspaces map[string]*models.Workspace) e
 	return os.WriteFile(filename, ToJson(workspaces), 0o644)
 }
 
-func LoadWorkspaces() (map[string]*models.Workspace, error) {
-	filename := viper.GetString("json_path")
-
+func Load(filename string) (map[string]*models.Workspace, error) {
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		return make(map[string]*models.Workspace), nil
 	}
