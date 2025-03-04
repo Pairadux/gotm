@@ -67,9 +67,21 @@ func Add(workspaces map[string]*models.Workspace, workspace string, desc string)
 	})
 }
 
-// TODO: Implement this method
-func Remove( /*t *models.TaskList, id int*/ ) {
-	fmt.Println("Task Removed")
+
+func Remove(workspaces map[string]*models.Workspace, workspace string, index int) (models.Task, bool) {
+	ws, exists := workspaces[workspace]
+	if !exists {
+		return models.Task{}, false
+	}
+	for i, t := range ws.Tasks {
+		if t.Index == index {
+			removedTask := t
+			copy(ws.Tasks[i:], ws.Tasks[i+1:])
+			ws.Tasks = ws.Tasks[:len(ws.Tasks)-1]
+			return removedTask, true
+		}
+	}
+	return models.Task{}, false
 }
 
 func Sort(sortType string, tasks []models.Task) {

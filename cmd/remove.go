@@ -25,10 +25,14 @@ package cmd
 // IMPORTS {{{
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/Pairadux/gotm/internal/taskops"
+	"github.com/Pairadux/gotm/internal/models"
+	"github.com/Pairadux/gotm/internal/storage"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 ) // }}}
 
 // removeCmd represents the remove command
@@ -40,20 +44,31 @@ var removeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		debugMessage(fmt.Sprintf("Remove called"))
 
-		workspaces := taskops.InitWorkspaces()
+		if len(args) == 0 {
+			_ = cmd.Help()
+			return
+		}
 
+		workspaces := taskops.InitWorkspaces()
 		workspace := resolveWorkspace(cmd)
 
-		for _, e := range workspaces[workspace].Tasks {
-			fmt.Printf("%d\t %s\n", e.Index, e.Description)
+		taskRemoved := models.Task{}
+		found := false
+
+		i, err := strconv.Atoi(args[0])
+		if err != nil {
+			panic(err)
 		}
 
-		if len(args) != 0 {
-			taskops.Remove()
+		taskRemoved, found = taskops.Remove(workspaces, workspace, i)
+		if found {
+			fmt.Printf("Task removed: %s\n", taskRemoved.Description)
+		} else {
+			fmt.Printf("Task with index %d does not exist.\n", i)
 		}
 
-		// storage.SaveTasksToFile(viper.GetString("json_path"), tm)
-		// fmt.Println("Tasks saved to json file:", viper.GetString("json_path"))
+		storage.SaveTasksToFile(viper.GetString("json_path"), workspaces)
+		debugMessage(fmt.Sprintf("Tasks saved to json file: %s", viper.GetString("json_path")))
 	},
 }
 
