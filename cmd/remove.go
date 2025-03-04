@@ -27,9 +27,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/Pairadux/gotm/internal/taskops"
 	"github.com/Pairadux/gotm/internal/models"
 	"github.com/Pairadux/gotm/internal/storage"
+	"github.com/Pairadux/gotm/internal/taskops"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
