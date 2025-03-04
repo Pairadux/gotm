@@ -58,8 +58,8 @@ func InitWorkspaces() map[string]*models.Workspace {
 	return workspaces
 }
 
-func Add(workspaces map[string]*models.Workspace, workspace string, desc string) {
-	workspaces[workspace].Tasks = append(workspaces[workspace].Tasks, models.Task{
+func Add(tasks *[]models.Task, desc string) {
+	*tasks = append(*tasks, models.Task{
 		Index:       0,
 		Created:     time.Now(),
 		Description: strings.TrimSpace(desc),
@@ -67,18 +67,25 @@ func Add(workspaces map[string]*models.Workspace, workspace string, desc string)
 	})
 }
 
-// TODO: Add a complete function
-
-func Remove(workspaces map[string]*models.Workspace, workspace string, index int) (models.Task, bool) {
-	ws, exists := workspaces[workspace]
-	if !exists {
-		return models.Task{}, false
-	}
-	for i, t := range ws.Tasks {
+// TODO: complete function
+func Complete(tasks *[]models.Task, index int) (models.Task, bool) {
+	for i, t := range *tasks {
 		if t.Index == index {
 			removedTask := t
-			copy(ws.Tasks[i:], ws.Tasks[i+1:])
-			ws.Tasks = ws.Tasks[:len(ws.Tasks)-1]
+			copy((*tasks)[i:], (*tasks)[i+1:])
+			*tasks = (*tasks)[:len(*tasks)-1]
+			return removedTask, true
+		}
+	}
+	return models.Task{}, false
+}
+
+func Remove(tasks *[]models.Task, index int) (models.Task, bool) {
+	for i, t := range *tasks {
+		if t.Index == index {
+			removedTask := t
+			copy((*tasks)[i:], (*tasks)[i+1:])
+			*tasks = (*tasks)[:len(*tasks)-1]
 			return removedTask, true
 		}
 	}

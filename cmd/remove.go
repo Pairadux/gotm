@@ -60,7 +60,7 @@ var removeCmd = &cobra.Command{
 			panic(err)
 		}
 
-		taskRemoved, found = taskops.Remove(workspaces, workspace, i)
+		taskRemoved, found = taskops.Remove(&workspaces[workspace].Tasks, i)
 		if found {
 			fmt.Printf("Task removed: %s\n", taskRemoved.Description)
 		} else {
