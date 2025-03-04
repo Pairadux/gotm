@@ -42,10 +42,9 @@ var listCmd = &cobra.Command{
 	Short:   "List items from Gotm",
 	Long:    `List Items from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugMessage(fmt.Sprintf("list called\n\n"))
+		debugMessage(fmt.Sprintf("List called"))
 
 		workspaces := taskops.InitWorkspaces()
-
 		workspace := resolveWorkspace(cmd)
 
 		debugMessage(fmt.Sprintf("Using workspace: %s\n\n", workspace))

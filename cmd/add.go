@@ -41,10 +41,9 @@ var addCmd = &cobra.Command{
 	Short:   "Add a task to Gotm",
 	Long:    `Add a task to Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugMessage(fmt.Sprintf("add called\n\n"))
+		debugMessage(fmt.Sprintf("Add called"))
 
 		workspaces := taskops.InitWorkspaces()
-
 		workspace := resolveWorkspace(cmd)
 
 		if len(args) != 0 {
