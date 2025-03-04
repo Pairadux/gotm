@@ -25,8 +25,6 @@ package cmd
 // IMPORTS {{{
 import (
 	"fmt"
-	"strings"
-	"time"
 
 	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/taskops"
@@ -57,13 +55,7 @@ var listCmd = &cobra.Command{
 		}
 		taskops.Sort(sortType, tasks)
 
-		// OUTPUT FORMATTING
-		r := strings.Repeat
-		fmt.Printf("%-5s │ %-40s │ %s\n", "Index", "Description", "Created")
-		fmt.Printf("%s┼%s┼%s\n", r("─", 6), r("─", 42), r("─", 20))
-		for _, e := range tasks {
-			fmt.Printf("%-5d │ %-40.40s │ %s\n", e.Index, e.Description, e.Created.Format(time.DateTime))
-		}
+		taskops.Print(tasks)
 
 		storage.SaveTasksToFile(viper.GetString("json_path"), workspaces)
 		debugMessage(fmt.Sprintf("\nTasks saved to json file: %s", viper.GetString("json_path")))
@@ -77,6 +69,7 @@ func init() { // {{{
 
 	// NOTE: Possibly add sorting method as a flag rather than argument
 	// This would allow the argument to be the workspace used, but thats also already a flag, so some more thought has to be put into this
+
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:

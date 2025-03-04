@@ -87,6 +87,15 @@ func Sort(sortType string, tasks []models.Task) {
 	}
 }
 
+func Print(tasks []models.Task) {
+	r := strings.Repeat
+	fmt.Printf("\n%-5s │ %-40s │ %s\n", "Index", "Description", "Created")
+	fmt.Printf("%s┼%s┼%s\n", r("─", 6), r("─", 42), r("─", 20))
+	for _, e := range tasks {
+		fmt.Printf("%-5d │ %-40.40s │ %s\n", e.Index, e.Description, e.Created.Format(time.DateTime))
+	}
+}
+
 // func AssignId(t *models.TaskList) int {
 // 	// n := 1
 // 	// SortTasks("id-asc", t)
