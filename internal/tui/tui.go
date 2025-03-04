@@ -39,7 +39,7 @@ type model struct {
 }
 
 func InitModel(workspace string) model {
-	workspaces := taskops.InitWorkspaces()
+	workspaces := taskops.InitActive()
 
 	return model{
 		choices: workspaces[workspace].Tasks,

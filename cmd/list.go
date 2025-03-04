@@ -42,7 +42,7 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		debugMessage(fmt.Sprintf("List called"))
 
-		workspaces := taskops.InitWorkspaces()
+		workspaces := taskops.InitActive()
 		workspace := resolveWorkspace(cmd)
 
 		debugMessage(fmt.Sprintf("Using workspace: %s\n\n", workspace))
@@ -57,8 +57,8 @@ var listCmd = &cobra.Command{
 
 		taskops.Print(tasks)
 
-		storage.SaveTasksToFile(viper.GetString("json_path"), workspaces)
-		debugMessage(fmt.Sprintf("\nTasks saved to json file: %s", viper.GetString("json_path")))
+		storage.SaveTasksToFile(viper.GetString("active_path"), workspaces)
+		debugMessage(fmt.Sprintf("\nTasks saved to json file: %s", viper.GetString("active_path")))
 	},
 }
 

@@ -117,8 +117,10 @@ func initConfig() { // {{{
 		viper.SetConfigName("config")
 	}
 
-	defaultJSONPath := filepath.Join(appDataDir, "tasks.json")
-	viper.SetDefault("json_path", defaultJSONPath)
+	activePath := filepath.Join(appDataDir, "active.json")
+	completedPath := filepath.Join(appDataDir, "completed.json")
+	viper.SetDefault("active_path", activePath)
+	viper.SetDefault("completed_path", completedPath)
 	viper.SetDefault("default_workspace", "inbox")
 	// TODO: Add option for default sorting method
 

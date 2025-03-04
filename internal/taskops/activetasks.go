@@ -38,8 +38,8 @@ import (
 	"github.com/spf13/viper"
 ) // }}}
 
-func InitWorkspaces() map[string]*models.Workspace {
-	workspaces, err := storage.LoadWorkspaces()
+func InitActive() map[string]*models.Workspace {
+	workspaces, err := storage.Load(viper.GetString("active_path"))
 	if err != nil {
 		panic(err)
 	}
@@ -67,17 +67,14 @@ func Add(tasks *[]models.Task, desc string) {
 	})
 }
 
-// TODO: complete function
-func Complete(tasks *[]models.Task, index int) (models.Task, bool) {
-	for i, t := range *tasks {
-		if t.Index == index {
-			removedTask := t
-			copy((*tasks)[i:], (*tasks)[i+1:])
-			*tasks = (*tasks)[:len(*tasks)-1]
-			return removedTask, true
+func Complete(tasks *[]models.Task, index int) bool {
+	for i := range *tasks {
+		if (*tasks)[i].Index == index {
+			(*tasks)[i].Completed = true
+			return true
 		}
 	}
-	return models.Task{}, false
+	return false
 }
 
 func Remove(tasks *[]models.Task, index int) (models.Task, bool) {
@@ -115,15 +112,3 @@ func Print(tasks []models.Task) {
 		fmt.Printf("%-5d │ %-40.40s │ %s\n", e.Index, e.Description, e.Created.Format(time.DateTime))
 	}
 }
-
-// func AssignId(t *models.TaskList) int {
-// 	// n := 1
-// 	// SortTasks("id-asc", t)
-// 	// for i, e := range t.Tasks {
-// 	// 	if e.Id != n {
-// 	// 		fmt.Println(e, i)
-// 	// 	}
-// 	// 	fmt.Println(i, e)
-// 	// }
-// 	return rand.IntN(10000)
-// }
