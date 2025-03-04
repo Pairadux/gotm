@@ -25,6 +25,7 @@ package cmd
 // IMPORTS {{{
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/Pairadux/gotm/internal/storage"
@@ -41,7 +42,6 @@ var listCmd = &cobra.Command{
 	Short:   "List items from Gotm",
 	Long:    `List Items from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		debugMessage(fmt.Sprintf("list called\n\n"))
 
 		workspaces := taskops.InitWorkspaces()
@@ -50,17 +50,20 @@ var listCmd = &cobra.Command{
 
 		debugMessage(fmt.Sprintf("Using workspace: %s\n\n", workspace))
 
-		ts := workspaces[workspace].Tasks
+		tasks := workspaces[workspace].Tasks
 
 		sortType := "natural"
 		if len(args) > 0 {
 			sortType = args[0]
 		}
-		taskops.Sort(sortType, ts)
+		taskops.Sort(sortType, tasks)
 
-		fmt.Printf("Index\t| Description\t| Created\n")
-		for _, e := range ts {
-			fmt.Printf("%d\t  %s\t  %s\n", e.Index, e.Description, e.Created.Format(time.DateTime))
+		// OUTPUT FORMATTING
+		r := strings.Repeat
+		fmt.Printf("%-5s │ %-40s │ %s\n", "Index", "Description", "Created")
+		fmt.Printf("%s┼%s┼%s\n", r("─", 6), r("─", 42), r("─", 20))
+		for _, e := range tasks {
+			fmt.Printf("%-5d │ %-40.40s │ %s\n", e.Index, e.Description, e.Created.Format(time.DateTime))
 		}
 
 		storage.SaveTasksToFile(viper.GetString("json_path"), workspaces)
