@@ -27,7 +27,7 @@ import (
 	"fmt"
 
 	"github.com/Pairadux/gotm/internal/models"
-	"github.com/Pairadux/gotm/internal/tasks"
+	"github.com/Pairadux/gotm/internal/taskops"
 
 	tea "github.com/charmbracelet/bubbletea"
 ) // }}}
@@ -39,7 +39,7 @@ type model struct {
 }
 
 func InitModel(workspace string) model {
-	workspaces := tasks.InitWorkspaces()
+	workspaces := taskops.InitWorkspaces()
 
 	return model{
 		choices: workspaces[workspace].Tasks,

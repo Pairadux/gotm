@@ -26,7 +26,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/Pairadux/gotm/internal/tasks"
+	"github.com/Pairadux/gotm/internal/taskops"
 
 	"github.com/spf13/cobra"
 ) // }}}
@@ -40,7 +40,7 @@ var removeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("remove called\n\n")
 
-		workspaces := tasks.InitWorkspaces()
+		workspaces := taskops.InitWorkspaces()
 
 		workspace := resolveWorkspace(cmd)
 
@@ -49,7 +49,7 @@ var removeCmd = &cobra.Command{
 		}
 
 		if len(args) != 0 {
-			tasks.Remove()
+			taskops.Remove()
 		}
 
 		// storage.SaveTasksToFile(viper.GetString("json_path"), tm)

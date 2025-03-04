@@ -28,7 +28,7 @@ import (
 	"time"
 
 	"github.com/Pairadux/gotm/internal/storage"
-	"github.com/Pairadux/gotm/internal/tasks"
+	"github.com/Pairadux/gotm/internal/taskops"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -44,7 +44,7 @@ var listCmd = &cobra.Command{
 
 		debugMessage(fmt.Sprintf("list called\n\n"))
 
-		workspaces := tasks.InitWorkspaces()
+		workspaces := taskops.InitWorkspaces()
 
 		workspace := resolveWorkspace(cmd)
 
@@ -56,7 +56,7 @@ var listCmd = &cobra.Command{
 		if len(args) > 0 {
 			sortType = args[0]
 		}
-		tasks.Sort(sortType, ts)
+		taskops.Sort(sortType, ts)
 
 		fmt.Printf("Index\t| Description\t| Created\n")
 		for _, e := range ts {

@@ -28,7 +28,7 @@ import (
 	"strings"
 
 	"github.com/Pairadux/gotm/internal/storage"
-	"github.com/Pairadux/gotm/internal/tasks"
+	"github.com/Pairadux/gotm/internal/taskops"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -43,12 +43,12 @@ var addCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		debugMessage(fmt.Sprintf("add called\n\n"))
 
-		workspaces := tasks.InitWorkspaces()
+		workspaces := taskops.InitWorkspaces()
 
 		workspace := resolveWorkspace(cmd)
 
 		if len(args) != 0 {
-			tasks.Add(workspaces, workspace, strings.Join(args, " "))
+			taskops.Add(workspaces, workspace, strings.Join(args, " "))
 		}
 
 		storage.SaveTasksToFile(viper.GetString("json_path"), workspaces)

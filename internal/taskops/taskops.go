@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */ // }}}
 
-package tasks
+package taskops
 
 // IMPORTS {{{
 import (
@@ -72,18 +72,18 @@ func Remove( /*t *models.TaskList, id int*/ ) {
 	fmt.Println("Task Removed")
 }
 
-func Sort(sortType string, ts []models.Task) {
+func Sort(sortType string, tasks []models.Task) {
 	switch sortType {
 	case "natural", "nat":
 		// fmt.Printf("Sorting with: natural sort\n\n")
-		utility.NaturalSort(ts)
+		utility.NaturalSort(tasks)
 	default:
 		fmt.Printf("Sort method: %s does not exist. Sorting with: natural sort\n\n", sortType)
-		utility.NaturalSort(ts)
+		utility.NaturalSort(tasks)
 	}
 
-	for i := range ts {
-		ts[i].Index = i + 1
+	for i := range tasks {
+		tasks[i].Index = i + 1
 	}
 }
 
