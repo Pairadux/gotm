@@ -52,11 +52,11 @@ var listCmd = &cobra.Command{
 
 		ts := workspaces[workspace].Tasks
 
+		sortType := "natural"
 		if len(args) > 0 {
-			tasks.Sort(args[0], ts)
-		} else {
-			tasks.Sort("natural", ts)
+			sortType = args[0]
 		}
+		tasks.Sort(sortType, ts)
 
 		fmt.Printf("Index\t| Description\t| Created\n")
 		for _, e := range ts {
