@@ -67,6 +67,7 @@ func Add(workspaces map[string]*models.Workspace, workspace string, desc string)
 	})
 }
 
+// TODO: Add a complete function
 
 func Remove(workspaces map[string]*models.Workspace, workspace string, index int) (models.Task, bool) {
 	ws, exists := workspaces[workspace]
