@@ -57,6 +57,13 @@ var removeCmd = &cobra.Command{
 		isCompleted, err := cmd.Flags().GetBool("completed") 
 		cobra.CheckErr(err)
 
+		if isCompleted {
+			taskState = taskops.InitCompleted()
+			path = viper.GetString("completed_path")
+		} else {
+			taskState = taskops.InitActive()
+			path = viper.GetString("active_path")
+		}
 
 		taskRemoved := models.Task{}
 		found := false
