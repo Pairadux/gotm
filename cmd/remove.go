@@ -54,14 +54,15 @@ var removeCmd = &cobra.Command{
 		var taskState *models.TaskState
 		var path string
 
+		isCompleted, err := cmd.Flags().GetBool("completed") 
+		cobra.CheckErr(err)
+
 
 		taskRemoved := models.Task{}
 		found := false
 
 		i, err := strconv.Atoi(args[0])
-		if err != nil {
-			panic(err)
-		}
+		cobra.CheckErr(err)
 
 		taskRemoved, found = taskops.Remove(&taskState.Workspaces[workspace].Tasks, i)
 		if found {

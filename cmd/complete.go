@@ -56,9 +56,7 @@ var completeCmd = &cobra.Command{
 		found := false
 
 		i, err := strconv.Atoi(args[0])
-		if err != nil {
-			panic(err)
-		}
+		cobra.CheckErr(err)
 
 		all, found = taskops.Complete(all, workspace, i)
 		if !found {

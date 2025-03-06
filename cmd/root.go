@@ -49,10 +49,7 @@ var (
 			// DEBUGGING
 			if len(os.Getenv("DEBUG")) > 0 {
 				f, err := tea.LogToFile("debug.log", "debug")
-				if err != nil {
-					fmt.Println("fatal:", err)
-					os.Exit(1)
-				}
+				cobra.CheckErr(err)
 				defer f.Close()
 			}
 
