@@ -58,6 +58,36 @@ func InitActive() map[string]*models.Workspace {
 	return workspaces
 }
 
+func InitCompleted() map[string]*models.Workspace {
+	workspaces, err := storage.Load(viper.GetString("completed_path"))
+	if err != nil {
+		panic(err)
+	}
+
+	if workspaces == nil {
+		workspaces = make(map[string]*models.Workspace)
+	}
+
+	workspace := viper.GetString("default_workspace")
+
+	if _, exists := workspaces[workspace]; !exists {
+		workspaces[workspace] = &models.Workspace{
+			Tasks: []models.Task{},
+		}
+	}
+	return workspaces
+}
+
+func InitAll() []map[string]*models.Workspace {
+
+	all := []map[string]*models.Workspace{
+		InitActive(),
+		InitCompleted(),
+	}
+
+	return all
+}
+
 func Add(tasks *[]models.Task, desc string) {
 	*tasks = append(*tasks, models.Task{
 		Index:       0,
@@ -104,7 +134,7 @@ func Sort(sortType string, tasks []models.Task) {
 	}
 }
 
-func Print(tasks []models.Task) {
+func PrintActive(tasks []models.Task) {
 	r := strings.Repeat
 	fmt.Printf("\n%-5s │ %-40s │ %s\n", "Index", "Description", "Created")
 	fmt.Printf("%s┼%s┼%s\n", r("─", 6), r("─", 42), r("─", 20))
