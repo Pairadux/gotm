@@ -35,6 +35,7 @@ import (
 ) // }}}
 
 // addCmd represents the add command
+// NOTE: This command will only deal with `active` tasks
 var addCmd = &cobra.Command{
 	Use:     "add",
 	Aliases: []string{"a"},

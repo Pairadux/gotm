@@ -36,6 +36,7 @@ import (
 ) // }}}
 
 // removeCmd represents the remove command
+// NOTE: This command can remove `active` or `completed` tasks
 var removeCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"r"},

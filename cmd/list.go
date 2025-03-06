@@ -34,6 +34,7 @@ import (
 ) // }}}
 
 // listCmd represents the list command
+// NOTE: This command will deal with both `active` and `completed` tasks or `all`
 var listCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"l"},

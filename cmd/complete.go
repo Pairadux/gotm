@@ -35,6 +35,8 @@ import (
 ) // }}}
 
 // completeCmd represents the complete command
+// NOTE: This command will deal with both `active` and `completed` tasks
+// Given that it has to move the completed active task to the completed workspace
 var completeCmd = &cobra.Command{
 	Use:     "complete",
 	Aliases: []string{"c"},
