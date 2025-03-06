@@ -24,9 +24,23 @@ package models
 
 import "time"
 
+// Application State
+type AppState struct {
+	Active    *TaskState `json:"-"` // Loaded by default
+	Completed *TaskState `json:"-"` // Loaded on demand
+}
+
+// TaskState
+type TaskState struct {
+	Workspaces map[string]*Workspace `json:"workspaces"`
+}
+
 // Workspace Struct
 type Workspace struct {
-	Tasks []Task `json:"tasks"`
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	LastModified time.Time `json:"lastModified"`
+	Tasks        []Task    `json:"tasks"`
 }
 
 // Task Struct

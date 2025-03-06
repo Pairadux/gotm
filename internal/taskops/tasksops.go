@@ -35,54 +35,50 @@ import (
 	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/utility"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 ) // }}}
 
-func InitActive() map[string]*models.Workspace {
-	workspaces, err := storage.Load(viper.GetString("active_path"))
-	if err != nil {
-		panic(err)
-	}
+func InitActive() *models.TaskState {
+	active, err := storage.Load(viper.GetString("active_path"))
+	cobra.CheckErr(err)
 
-	if workspaces == nil {
-		workspaces = make(map[string]*models.Workspace)
-	}
-
+	workspaces := active.Workspaces
 	workspace := viper.GetString("default_workspace")
 
 	if _, exists := workspaces[workspace]; !exists {
 		workspaces[workspace] = &models.Workspace{
-			Tasks: []models.Task{},
+			ID:           "inbox",
+			Name:         "Inbox",
+			LastModified: time.Now(),
+			Tasks:        []models.Task{},
 		}
 	}
-	return workspaces
+	return active
 }
 
-func InitCompleted() map[string]*models.Workspace {
-	workspaces, err := storage.Load(viper.GetString("completed_path"))
-	if err != nil {
-		panic(err)
-	}
+func InitCompleted() *models.TaskState {
+	completed, err := storage.Load(viper.GetString("completed_path"))
+	cobra.CheckErr(err)
 
-	if workspaces == nil {
-		workspaces = make(map[string]*models.Workspace)
-	}
-
+	workspaces := completed.Workspaces
 	workspace := viper.GetString("default_workspace")
 
 	if _, exists := workspaces[workspace]; !exists {
 		workspaces[workspace] = &models.Workspace{
-			Tasks: []models.Task{},
+			ID:           "inbox",
+			Name:         "Inbox",
+			LastModified: time.Now(),
+			Tasks:        []models.Task{},
 		}
 	}
-	return workspaces
+	return completed
 }
 
-func InitAll() []map[string]*models.Workspace {
-
-	all := []map[string]*models.Workspace{
-		InitActive(),
-		InitCompleted(),
+func InitAll() models.AppState {
+	all := models.AppState{
+		Active:    InitActive(),
+		Completed: InitCompleted(),
 	}
 
 	return all
@@ -97,14 +93,25 @@ func Add(tasks *[]models.Task, desc string) {
 	})
 }
 
-func Complete(tasks *[]models.Task, index int) bool {
-	for i := range *tasks {
-		if (*tasks)[i].Index == index {
-			(*tasks)[i].Completed = true
-			return true
+func Complete(appState models.AppState, workspace string, index int) (models.AppState, bool) {
+	activeWorkspace := appState.Active.Workspaces[workspace]
+	completedWorkspace := appState.Completed.Workspaces[workspace]
+
+	for i := range activeWorkspace.Tasks {
+		if activeWorkspace.Tasks[i].Index == index {
+			activeWorkspace.Tasks[i].Completed = true
+			removedTask, _ := Remove(&activeWorkspace.Tasks, i)
+			completedWorkspace.Tasks = append(completedWorkspace.Tasks, removedTask)
+
+			now := time.Now()
+			completedWorkspace.LastModified = now
+			activeWorkspace.LastModified = now
+
+			return appState, true
 		}
 	}
-	return false
+
+	return appState, false
 }
 
 func Remove(tasks *[]models.Task, index int) (models.Task, bool) {

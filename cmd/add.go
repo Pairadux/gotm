@@ -49,15 +49,16 @@ var addCmd = &cobra.Command{
 			return
 		}
 
-		workspaces := taskops.InitActive()
+		active := taskops.InitActive()
 		workspace := resolveWorkspace(cmd)
 
 		if len(args) != 0 {
-			taskops.Add(&workspaces[workspace].Tasks, strings.Join(args, " "))
+			taskops.Add(&active.Workspaces[workspace].Tasks, strings.Join(args, " "))
 		}
 
-		storage.SaveTasksToFile(viper.GetString("active_path"), workspaces)
-		debugMessage(fmt.Sprintf("Tasks saved to json file: %s", viper.GetString("active_path")))
+		active_path := viper.GetString("active_path")
+		storage.SaveTasksToFile(active_path, active)
+		debugMessage(fmt.Sprintf("Tasks saved to json file: %s", active_path))
 	},
 }
 

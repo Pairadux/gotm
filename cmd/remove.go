@@ -50,8 +50,10 @@ var removeCmd = &cobra.Command{
 			return
 		}
 
-		workspaces := taskops.InitActive()
 		workspace := resolveWorkspace(cmd)
+		var taskState *models.TaskState
+		var path string
+
 
 		taskRemoved := models.Task{}
 		found := false
@@ -61,15 +63,15 @@ var removeCmd = &cobra.Command{
 			panic(err)
 		}
 
-		taskRemoved, found = taskops.Remove(&workspaces[workspace].Tasks, i)
+		taskRemoved, found = taskops.Remove(&taskState.Workspaces[workspace].Tasks, i)
 		if found {
 			fmt.Printf("Task removed: %s\n", taskRemoved.Description)
 		} else {
 			fmt.Printf("Task with index %d does not exist.\n", i)
 		}
 
-		storage.SaveTasksToFile(viper.GetString("active_path"), workspaces)
-		debugMessage(fmt.Sprintf("Tasks saved to json file: %s", viper.GetString("active_path")))
+		storage.SaveTasksToFile(path, taskState)
+		debugMessage(fmt.Sprintf("Tasks saved to json file: %s", path))
 	},
 }
 

@@ -31,21 +31,23 @@ import (
 	"github.com/Pairadux/gotm/internal/models"
 ) // }}}
 
-func ToJson(workspaces map[string]*models.Workspace) []byte {
-	data, err := json.Marshal(workspaces)
+func ToJson(taskState *models.TaskState) []byte {
+	data, err := json.Marshal(taskState)
 	if err != nil {
 		panic(err)
 	}
 	return data
 }
 
-func SaveTasksToFile(filename string, workspaces map[string]*models.Workspace) error {
-	return os.WriteFile(filename, ToJson(workspaces), 0o644)
+func SaveTasksToFile(filename string, taskState *models.TaskState) error {
+	return os.WriteFile(filename, ToJson(taskState), 0o644)
 }
 
-func Load(filename string) (map[string]*models.Workspace, error) {
+func Load(filename string) (*models.TaskState, error) {
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		return make(map[string]*models.Workspace), nil
+		return &models.TaskState{
+			Workspaces: make(map[string]*models.Workspace),
+		}, nil
 	}
 
 	file, err := os.Open(filename)
@@ -59,10 +61,10 @@ func Load(filename string) (map[string]*models.Workspace, error) {
 		return nil, err
 	}
 
-	var workspaces map[string]*models.Workspace
-	if err := json.Unmarshal(data, &workspaces); err != nil {
+	var taskState models.TaskState
+	if err := json.Unmarshal(data, &taskState); err != nil {
 		return nil, err
 	}
 
-	return workspaces, nil
+	return &taskState, nil
 }

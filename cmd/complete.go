@@ -50,7 +50,7 @@ var completeCmd = &cobra.Command{
 			return
 		}
 
-		active := taskops.InitActive()
+		all := taskops.InitAll()
 		workspace := resolveWorkspace(cmd)
 
 		found := false
@@ -60,16 +60,16 @@ var completeCmd = &cobra.Command{
 			panic(err)
 		}
 
-		found = taskops.Complete(&active[workspace].Tasks, i)
+		all, found = taskops.Complete(all, workspace, i)
 		if !found {
 			fmt.Printf("Task with index %d does not exist.\n", i)
 		}
 
-		storage.SaveTasksToFile(viper.GetString("active_path"), active)
+		storage.SaveTasksToFile(viper.GetString("active_path"), all.Active)
 		debugMessage(fmt.Sprintf("Active tasks saved to json file: %s", viper.GetString("active_path")))
 
-		// storage.SaveTasksToFile(viper.GetString("completed_path"), )
-		// debugMessage(fmt.Sprintf("Completed tasks saved to json file: %s", viper.GetString("completed_path")))
+		storage.SaveTasksToFile(viper.GetString("completed_path"), all.Completed)
+		debugMessage(fmt.Sprintf("Completed tasks saved to json file: %s", viper.GetString("completed_path")))
 	},
 }
 

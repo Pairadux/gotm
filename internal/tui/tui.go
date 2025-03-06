@@ -39,10 +39,10 @@ type model struct {
 }
 
 func InitModel(workspace string) model {
-	workspaces := taskops.InitActive()
+	active := taskops.InitActive()
 
 	return model{
-		choices: workspaces[workspace].Tasks,
+		choices: active.Workspaces[workspace].Tasks,
 
 		selected: make(map[int]struct{}),
 	}
