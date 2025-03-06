@@ -29,7 +29,6 @@ import (
 	"os"
 
 	"github.com/Pairadux/gotm/internal/models"
-	"github.com/spf13/viper"
 ) // }}}
 
 func ToJson(workspaces map[string]*models.Workspace) []byte {
