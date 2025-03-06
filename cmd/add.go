@@ -44,6 +44,11 @@ var addCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		debugMessage(fmt.Sprintf("Add called"))
 
+		if len(args) == 0 {
+			_ = cmd.Help()
+			return
+		}
+
 		workspaces := taskops.InitActive()
 		workspace := resolveWorkspace(cmd)
 
