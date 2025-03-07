@@ -26,9 +26,11 @@ package cmd
 import (
 	"fmt"
 	"strconv"
+	"time"
 
-	"github.com/Pairadux/gotm/internal/taskops"
+	"github.com/Pairadux/gotm/internal/models"
 	"github.com/Pairadux/gotm/internal/storage"
+	"github.com/Pairadux/gotm/internal/taskops"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -43,7 +45,7 @@ var completeCmd = &cobra.Command{
 	Short:   "Mark a task as completed in Gotm",
 	Long:    `Mark a task as completed in Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugMessage(fmt.Sprintf("Remove called"))
+		debugMessage(fmt.Sprintf("Complete called"))
 
 		if len(args) == 0 {
 			_ = cmd.Help()
@@ -52,6 +54,17 @@ var completeCmd = &cobra.Command{
 
 		all := taskops.InitAll()
 		workspace := resolveWorkspace(cmd)
+
+		err := ValidateWorkspace(all.Active, workspace)
+		cobra.CheckErr(err)
+
+		if err = ValidateWorkspace(all.Completed, workspace); err != nil {
+			all.Completed.Workspaces[workspace] = &models.Workspace{
+				Name:         all.Active.Workspaces[workspace].Name,
+				LastModified: time.Now(),
+				Tasks:        []models.Task{},
+			}
+		}
 
 		found := false
 

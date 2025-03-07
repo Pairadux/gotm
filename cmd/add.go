@@ -56,18 +56,18 @@ var addCmd = &cobra.Command{
 		active := taskops.InitActive()
 		workspace := resolveWorkspace(cmd)
 
-		if active.Workspaces[workspace] == nil {
+		if err := ValidateWorkspace(active, workspace); err != nil {
 			reader := bufio.NewReader(os.Stdin)
 			fmt.Printf("Workspace '%s', not found. Create it? (y/n): ", workspace)
 			input, _ := reader.ReadString('\n')
 			input = strings.ToLower(strings.TrimSpace(input))
 			if input == "yes" || input == "y" || input == "" {
 				active.Workspaces[workspace] = &models.Workspace{
-					Name:         strings.ToTitle(workspace),
+					Name:         workspace,
 					LastModified: time.Now(),
 					Tasks:        []models.Task{},
 				}
-				fmt.Printf("Created default workspace '%s'.\n", strings.ToTitle(workspace))
+				fmt.Printf("Created workspace '%s'.\n", workspace)
 			} else {
 				fmt.Printf("Workspace creation aborted.\n")
 				fmt.Printf("You can manually create a workspace with 'gotm workspace create <workspace>\n")

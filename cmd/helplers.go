@@ -27,6 +27,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Pairadux/gotm/internal/models"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )// }}}
@@ -42,4 +44,11 @@ func debugMessage(m string) {
 	if len(os.Getenv("DEBUG")) > 0 {
 		fmt.Printf("%s\n", m)
 	}
+}
+
+func ValidateWorkspace(active *models.TaskState, workspace string) error {
+	if active.Workspaces == nil || active.Workspaces[workspace] == nil {
+		return fmt.Errorf("workspace %q not found", workspace)
+	}
+	return nil
 }

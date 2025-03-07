@@ -65,6 +65,9 @@ var removeCmd = &cobra.Command{
 			path = viper.GetString("active_path")
 		}
 
+		err = ValidateWorkspace(taskState, workspace)
+		cobra.CheckErr(err)
+
 		taskRemoved := models.Task{}
 		found := false
 

@@ -46,7 +46,8 @@ var listCmd = &cobra.Command{
 		active := taskops.InitActive()
 		workspace := resolveWorkspace(cmd)
 
-		debugMessage(fmt.Sprintf("Using workspace: %s\n\n", workspace))
+		err := ValidateWorkspace(active, workspace)
+		cobra.CheckErr(err)
 
 		tasks := active.Workspaces[workspace].Tasks
 
