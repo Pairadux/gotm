@@ -36,8 +36,8 @@ import (
 ) // }}}
 
 var (
-	cfgFile   string
-	workspace string
+	cfgFileFlag   string
+	workspaceFlag string
 
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd = &cobra.Command{
@@ -76,10 +76,12 @@ func Execute() { // {{{
 // Cobra supports persistent flags, which, if defined here,
 // will be global for your application.
 func init() { // {{{
+	rootCmd.AddCommand(workspace.WorkspaceCmd)
+
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gotm.yaml)")
-	rootCmd.PersistentFlags().StringVar(&workspace, "workspace", "", "workspace to use (default is inbox)")
+	rootCmd.PersistentFlags().StringVar(&cfgFileFlag, "config", "", "config file (default is $HOME/.gotm.yaml)")
+	rootCmd.PersistentFlags().StringVar(&workspaceFlag, "workspace", "", "workspace to use (default is inbox)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -96,9 +98,9 @@ func initConfig() { // {{{
 
 	appConfigDir := filepath.Join(homeDir, ".config", "gotm")
 
-	if cfgFile != "" {
+	if cfgFileFlag != "" {
 		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
+		viper.SetConfigFile(cfgFileFlag)
 	} else {
 		if _, err := os.Stat(appConfigDir); os.IsNotExist(err) {
 			cobra.CheckErr(os.MkdirAll(appConfigDir, 0o755))
@@ -125,7 +127,7 @@ func initConfig() { // {{{
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			if cfgFile == "" {
+			if cfgFileFlag == "" {
 				configFilePath := filepath.Join(appConfigDir, "config.yaml")
 
 				fmt.Println("Config file not found, creating default config file...")
