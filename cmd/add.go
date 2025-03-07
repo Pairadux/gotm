@@ -24,9 +24,13 @@ package cmd
 
 // IMPORTS {{{
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
+	"time"
 
+	"github.com/Pairadux/gotm/internal/models"
 	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/taskops"
 
@@ -52,9 +56,26 @@ var addCmd = &cobra.Command{
 		active := taskops.InitActive()
 		workspace := resolveWorkspace(cmd)
 
-		if len(args) != 0 {
-			taskops.Add(&active.Workspaces[workspace].Tasks, strings.Join(args, " "))
+		if active.Workspaces[workspace] == nil {
+			reader := bufio.NewReader(os.Stdin)
+			fmt.Printf("Workspace '%s', not found. Create it? (y/n): ", workspace)
+			input, _ := reader.ReadString('\n')
+			input = strings.ToLower(strings.TrimSpace(input))
+			if input == "yes" || input == "y" || input == "" {
+				active.Workspaces[workspace] = &models.Workspace{
+					Name:         strings.ToTitle(workspace),
+					LastModified: time.Now(),
+					Tasks:        []models.Task{},
+				}
+				fmt.Printf("Created default workspace '%s'.\n", strings.ToTitle(workspace))
+			} else {
+				fmt.Printf("Workspace creation aborted.\n")
+				fmt.Printf("You can manually create a workspace with 'gotm workspace create <workspace>\n")
+				os.Exit(0)
+			}
 		}
+
+		taskops.Add(&active.Workspaces[workspace].Tasks, strings.Join(args, " "))
 
 		active_path := viper.GetString("active_path")
 		storage.SaveTasksToFile(active_path, active)
