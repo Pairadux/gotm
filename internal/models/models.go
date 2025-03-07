@@ -37,7 +37,6 @@ type TaskState struct {
 
 // Workspace Struct
 type Workspace struct {
-	ID           string    `json:"id"`
 	Name         string    `json:"name"`
 	LastModified time.Time `json:"lastModified"`
 	Tasks        []Task    `json:"tasks"`
