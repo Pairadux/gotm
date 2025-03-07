@@ -43,17 +43,6 @@ func InitActive() *models.TaskState {
 	active, err := storage.Load(viper.GetString("active_path"))
 	cobra.CheckErr(err)
 
-	workspaces := active.Workspaces
-	workspace := viper.GetString("default_workspace")
-
-	if _, exists := workspaces[workspace]; !exists {
-		workspaces[workspace] = &models.Workspace{
-			ID:           "inbox",
-			Name:         "Inbox",
-			LastModified: time.Now(),
-			Tasks:        []models.Task{},
-		}
-	}
 	return active
 }
 
@@ -61,17 +50,6 @@ func InitCompleted() *models.TaskState {
 	completed, err := storage.Load(viper.GetString("completed_path"))
 	cobra.CheckErr(err)
 
-	workspaces := completed.Workspaces
-	workspace := viper.GetString("default_workspace")
-
-	if _, exists := workspaces[workspace]; !exists {
-		workspaces[workspace] = &models.Workspace{
-			ID:           "inbox",
-			Name:         "Inbox",
-			LastModified: time.Now(),
-			Tasks:        []models.Task{},
-		}
-	}
 	return completed
 }
 
