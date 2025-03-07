@@ -33,6 +33,7 @@ import (
 	"github.com/Pairadux/gotm/internal/models"
 	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/taskops"
+	"github.com/Pairadux/gotm/internal/utility"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -46,7 +47,7 @@ var addCmd = &cobra.Command{
 	Short:   "Add a task to Gotm",
 	Long:    `Add a task to Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugMessage(fmt.Sprintf("Add called"))
+		utility.DebugMessage(fmt.Sprintf("Add called"))
 
 		if len(args) == 0 {
 			_ = cmd.Help()
@@ -54,9 +55,9 @@ var addCmd = &cobra.Command{
 		}
 
 		active := taskops.InitActive()
-		workspace := resolveWorkspace(cmd)
+		workspace := utility.ResolveWorkspace(cmd)
 
-		if err := ValidateWorkspace(active, workspace); err != nil {
+		if err := utility.ValidateWorkspace(active, workspace); err != nil {
 			reader := bufio.NewReader(os.Stdin)
 			fmt.Printf("Workspace '%s', not found. Create it? (y/n): ", workspace)
 			input, _ := reader.ReadString('\n')
@@ -79,7 +80,7 @@ var addCmd = &cobra.Command{
 
 		active_path := viper.GetString("active_path")
 		storage.SaveTasksToFile(active_path, active)
-		debugMessage(fmt.Sprintf("Tasks saved to json file: %s", active_path))
+		utility.DebugMessage(fmt.Sprintf("Tasks saved to json file: %s", active_path))
 	},
 }
 

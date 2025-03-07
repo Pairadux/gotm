@@ -30,6 +30,7 @@ import (
 	"github.com/Pairadux/gotm/internal/models"
 	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/taskops"
+	"github.com/Pairadux/gotm/internal/utility"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -43,14 +44,14 @@ var removeCmd = &cobra.Command{
 	Short:   "Remove a task from Gotm",
 	Long:    `Remove a task from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugMessage(fmt.Sprintf("Remove called"))
+		utility.DebugMessage(fmt.Sprintf("Remove called"))
 
 		if len(args) == 0 {
 			_ = cmd.Help()
 			return
 		}
 
-		workspace := resolveWorkspace(cmd)
+		workspace := utility.ResolveWorkspace(cmd)
 		var taskState *models.TaskState
 		var path string
 
@@ -65,7 +66,7 @@ var removeCmd = &cobra.Command{
 			path = viper.GetString("active_path")
 		}
 
-		err = ValidateWorkspace(taskState, workspace)
+		err = utility.ValidateWorkspace(taskState, workspace)
 		cobra.CheckErr(err)
 
 		taskRemoved := models.Task{}
@@ -82,7 +83,7 @@ var removeCmd = &cobra.Command{
 		}
 
 		storage.SaveTasksToFile(path, taskState)
-		debugMessage(fmt.Sprintf("Tasks saved to json file: %s", path))
+		utility.DebugMessage(fmt.Sprintf("Tasks saved to json file: %s", path))
 	},
 }
 

@@ -30,6 +30,7 @@ import (
 
 	"github.com/Pairadux/gotm/cmd/workspace"
 	"github.com/Pairadux/gotm/internal/tui"
+	"github.com/Pairadux/gotm/internal/utility"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
@@ -55,7 +56,7 @@ var (
 			}
 
 			// TUI PROGRAM
-			p := tea.NewProgram(tui.InitModel(resolveWorkspace(cmd)))
+			p := tea.NewProgram(tui.InitModel(utility.ResolveWorkspace(cmd)))
 			if _, err := p.Run(); err != nil {
 				fmt.Printf("There's been an error: %v", err)
 				os.Exit(1)
@@ -141,5 +142,5 @@ func initConfig() { // {{{
 			cobra.CheckErr(err)
 		}
 	}
-	debugMessage(fmt.Sprintf("Using config file: %s", viper.ConfigFileUsed()))
+	utility.DebugMessage(fmt.Sprintf("Using config file: %s", viper.ConfigFileUsed()))
 } // }}}

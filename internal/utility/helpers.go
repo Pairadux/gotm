@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */ // }}}
 
-package cmd
+package utility
 
 // IMPORTS {{{
 import (
@@ -33,14 +33,14 @@ import (
 	"github.com/spf13/viper"
 )// }}}
 
-func resolveWorkspace(cmd *cobra.Command) string {
+func ResolveWorkspace(cmd *cobra.Command) string {
 	if cmd.Flags().Changed("workspace") {
 		return cmd.Flag("workspace").Value.String()
 	}
 	return viper.GetString("default_workspace")
 }
 
-func debugMessage(m string) {
+func DebugMessage(m string) {
 	if len(os.Getenv("DEBUG")) > 0 {
 		fmt.Printf("%s\n", m)
 	}

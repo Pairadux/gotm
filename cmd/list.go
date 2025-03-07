@@ -28,6 +28,7 @@ import (
 
 	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/taskops"
+	"github.com/Pairadux/gotm/internal/utility"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -41,12 +42,12 @@ var listCmd = &cobra.Command{
 	Short:   "List items from Gotm",
 	Long:    `List Items from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugMessage(fmt.Sprintf("List called"))
+		utility.DebugMessage(fmt.Sprintf("List called"))
 
 		active := taskops.InitActive()
-		workspace := resolveWorkspace(cmd)
+		workspace := utility.ResolveWorkspace(cmd)
 
-		err := ValidateWorkspace(active, workspace)
+		err := utility.ValidateWorkspace(active, workspace)
 		cobra.CheckErr(err)
 
 		tasks := active.Workspaces[workspace].Tasks
@@ -71,7 +72,7 @@ var listCmd = &cobra.Command{
 		taskops.PrintActive(tasks)
 
 		storage.SaveTasksToFile(viper.GetString("active_path"), active)
-		debugMessage(fmt.Sprintf("\nTasks saved to json file: %s", viper.GetString("active_path")))
+		utility.DebugMessage(fmt.Sprintf("\nTasks saved to json file: %s", viper.GetString("active_path")))
 	},
 }
 

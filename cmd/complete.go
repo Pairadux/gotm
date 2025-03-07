@@ -31,6 +31,7 @@ import (
 	"github.com/Pairadux/gotm/internal/models"
 	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/taskops"
+	"github.com/Pairadux/gotm/internal/utility"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -45,7 +46,7 @@ var completeCmd = &cobra.Command{
 	Short:   "Mark a task as completed in Gotm",
 	Long:    `Mark a task as completed in Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugMessage(fmt.Sprintf("Complete called"))
+		utility.DebugMessage(fmt.Sprintf("Complete called"))
 
 		if len(args) == 0 {
 			_ = cmd.Help()
@@ -53,12 +54,12 @@ var completeCmd = &cobra.Command{
 		}
 
 		all := taskops.InitAll()
-		workspace := resolveWorkspace(cmd)
+		workspace := utility.ResolveWorkspace(cmd)
 
-		err := ValidateWorkspace(all.Active, workspace)
+		err := utility.ValidateWorkspace(all.Active, workspace)
 		cobra.CheckErr(err)
 
-		if err = ValidateWorkspace(all.Completed, workspace); err != nil {
+		if err = utility.ValidateWorkspace(all.Completed, workspace); err != nil {
 			all.Completed.Workspaces[workspace] = &models.Workspace{
 				Name:         all.Active.Workspaces[workspace].Name,
 				LastModified: time.Now(),
@@ -77,10 +78,10 @@ var completeCmd = &cobra.Command{
 		}
 
 		storage.SaveTasksToFile(viper.GetString("active_path"), all.Active)
-		debugMessage(fmt.Sprintf("Active tasks saved to json file: %s", viper.GetString("active_path")))
+		utility.DebugMessage(fmt.Sprintf("Active tasks saved to json file: %s", viper.GetString("active_path")))
 
 		storage.SaveTasksToFile(viper.GetString("completed_path"), all.Completed)
-		debugMessage(fmt.Sprintf("Completed tasks saved to json file: %s", viper.GetString("completed_path")))
+		utility.DebugMessage(fmt.Sprintf("Completed tasks saved to json file: %s", viper.GetString("completed_path")))
 	},
 }
 
