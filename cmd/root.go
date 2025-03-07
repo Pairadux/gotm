@@ -28,6 +28,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/Pairadux/gotm/cmd/workspace"
 	"github.com/Pairadux/gotm/internal/tui"
 
 	tea "github.com/charmbracelet/bubbletea"

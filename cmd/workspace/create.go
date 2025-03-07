@@ -20,35 +20,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */ // }}}
 
-package cmd
+package workspace
 
+// IMPORTS {{{
 import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-)
+) // }}}
 
-// workspaceCmd represents the workspace command
-var workspaceCmd = &cobra.Command{
-	Use:     "workspace",
-	Aliases: []string{"w"},
-	Short:   "Add a workspace to Gotm",
-	Long:    `Add a workspace to Gotm with some other information listed as well`,
+// createCmd represents the create command
+var createCmd = &cobra.Command{
+	Use:   "create",
+	Aliases: []string{"c"},
+	Short: "Create a workspace in Gotm",
+	Long:  `Create a workspace in Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("workspace called")
+		fmt.Println("create called")
 	},
 }
 
 func init() {
-	addCmd.AddCommand(workspaceCmd)
+	WorkspaceCmd.AddCommand(createCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// workspaceCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// workspaceCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
