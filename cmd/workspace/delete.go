@@ -33,6 +33,7 @@ import (
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
 	Aliases: []string{"d"},
+	Args:    cobra.ExactArgs(1),
 	Short: "Delete a workspace from Gotm",
 	Long:  `Delete a workspace from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {

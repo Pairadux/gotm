@@ -35,6 +35,7 @@ var createCmd = &cobra.Command{
 	Aliases: []string{"c"},
 	Short: "Create a workspace in Gotm",
 	Long:  `Create a workspace in Gotm with some other information listed as well`,
+	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("create called")
 	},

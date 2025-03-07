@@ -43,15 +43,11 @@ import (
 var completeCmd = &cobra.Command{
 	Use:     "complete",
 	Aliases: []string{"c"},
+	Args:    cobra.ExactArgs(1),
 	Short:   "Mark a task as completed in Gotm",
 	Long:    `Mark a task as completed in Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.DebugMessage(fmt.Sprintf("Complete called"))
-
-		if len(args) == 0 {
-			_ = cmd.Help()
-			return
-		}
 
 		all := taskops.InitAll()
 		workspace := utility.ResolveWorkspace(cmd)

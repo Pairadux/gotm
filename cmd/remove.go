@@ -41,15 +41,11 @@ import (
 var removeCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"r"},
+	Args:    cobra.ExactArgs(1),
 	Short:   "Remove a task from Gotm",
 	Long:    `Remove a task from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.DebugMessage(fmt.Sprintf("Remove called"))
-
-		if len(args) == 0 {
-			_ = cmd.Help()
-			return
-		}
 
 		workspace := utility.ResolveWorkspace(cmd)
 		var taskState *models.TaskState
