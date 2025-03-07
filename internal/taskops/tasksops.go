@@ -25,6 +25,7 @@ package taskops
 // IMPORTS {{{
 import (
 	"fmt"
+	"slices"
 	"strings"
 	"time"
 
@@ -75,15 +76,19 @@ func Complete(appState models.AppState, workspace string, index int) (models.App
 	activeWorkspace := appState.Active.Workspaces[workspace]
 	completedWorkspace := appState.Completed.Workspaces[workspace]
 
-	for i := range activeWorkspace.Tasks {
-		if activeWorkspace.Tasks[i].Index == index {
-			activeWorkspace.Tasks[i].Completed = true
-			removedTask, _ := Remove(&activeWorkspace.Tasks, i)
-			completedWorkspace.Tasks = append(completedWorkspace.Tasks, removedTask)
+	for i, task := range activeWorkspace.Tasks {
+		if task.Index == index {
+			completedTask := task
+			completedTask.Completed = true
+
+			activeWorkspace.Tasks = slices.Delete(activeWorkspace.Tasks, i, i+1)
+
+			completedWorkspace.Tasks = append(completedWorkspace.Tasks, completedTask)
 
 			now := time.Now()
-			completedWorkspace.LastModified = now
+
 			activeWorkspace.LastModified = now
+			completedWorkspace.LastModified = now
 
 			return appState, true
 		}
@@ -96,8 +101,7 @@ func Remove(tasks *[]models.Task, index int) (models.Task, bool) {
 	for i, t := range *tasks {
 		if t.Index == index {
 			removedTask := t
-			copy((*tasks)[i:], (*tasks)[i+1:])
-			*tasks = (*tasks)[:len(*tasks)-1]
+			*tasks = slices.Delete(*tasks, i, i+1)
 			return removedTask, true
 		}
 	}
