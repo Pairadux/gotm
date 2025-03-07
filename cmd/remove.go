@@ -51,7 +51,7 @@ var removeCmd = &cobra.Command{
 		var taskState *models.TaskState
 		var path string
 
-		isCompleted, err := cmd.Flags().GetBool("completed") 
+		isCompleted, err := cmd.Flags().GetBool("completed")
 		cobra.CheckErr(err)
 
 		if isCompleted {

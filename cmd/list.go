@@ -52,8 +52,8 @@ var listCmd = &cobra.Command{
 
 		tasks := active.Workspaces[workspace].Tasks
 
-		if len(args) > 0{
-			switch(args[0]) {
+		if len(args) > 0 {
+			switch args[0] {
 			case "all":
 				fmt.Printf("all")
 			case "active":
@@ -61,9 +61,9 @@ var listCmd = &cobra.Command{
 			case "completed":
 				fmt.Printf("completed")
 			default:
-				fmt.Printf("default")	
+				fmt.Printf("default")
 			}
-		} 
+		}
 
 		sortType := viper.GetString("default_sorting_method")
 
