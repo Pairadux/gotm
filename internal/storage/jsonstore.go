@@ -40,7 +40,11 @@ func ToJson(taskState *models.TaskState) []byte {
 }
 
 func SaveTasksToFile(filename string, taskState *models.TaskState) error {
-	return os.WriteFile(filename, ToJson(taskState), 0o644)
+	tempFile := filename + ".tmp"
+	if err := os.WriteFile(tempFile, ToJson(taskState), 0644); err != nil {
+		return err
+	}
+	return os.Rename(tempFile, filename)
 }
 
 func Load(filename string) (*models.TaskState, error) {
@@ -59,6 +63,12 @@ func Load(filename string) (*models.TaskState, error) {
 	data, err := io.ReadAll(file)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(data) == 0 {
+		return &models.TaskState{
+			Workspaces: make(map[string]*models.Workspace),
+		}, nil
 	}
 
 	var taskState models.TaskState
