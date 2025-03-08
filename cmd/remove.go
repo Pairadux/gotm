@@ -93,7 +93,8 @@ func init() { // {{{
 	// and all subcommands, e.g.:
 	// removeCmd.PersistentFlags().String("foo", "", "A help for foo")
 
-	removeCmd.Flags().StringP("workspace", "w", "inbox", "workspace to use (default is inbox)")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
+	removeCmd.Flags().StringP("workspace", "w", "inbox", "workspace to use (default is inbox)")
+	removeCmd.Flags().BoolP("completed", "c", false, "Remove a completed task")
 } // }}}
