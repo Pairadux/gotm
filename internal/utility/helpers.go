@@ -31,8 +31,9 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-)// }}}
+) // }}}
 
+// ResolveWorkspace takes a cmd and returns the value of the workspace flag if set, otherwise it returns the default from the config file.
 func ResolveWorkspace(cmd *cobra.Command) string {
 	if cmd.Flags().Changed("workspace") {
 		return cmd.Flag("workspace").Value.String()
@@ -40,14 +41,16 @@ func ResolveWorkspace(cmd *cobra.Command) string {
 	return viper.GetString("default_workspace")
 }
 
+// DebugMessage takes a string m and prints to stdout if the DEBUG environment variable is set.
 func DebugMessage(m string) {
 	if len(os.Getenv("DEBUG")) > 0 {
 		fmt.Printf("%s\n", m)
 	}
 }
 
-func ValidateWorkspace(active *models.TaskState, workspace string) error {
-	if active.Workspaces == nil || active.Workspaces[workspace] == nil {
+// ValidateWorkspace checks taskState.Workspaces and taskState.Workspaces[workspace], and returns an error if either is nil.
+func ValidateWorkspace(taskState *models.TaskState, workspace string) error {
+	if taskState.Workspaces == nil || taskState.Workspaces[workspace] == nil {
 		return fmt.Errorf("workspace %q not found", workspace)
 	}
 	return nil

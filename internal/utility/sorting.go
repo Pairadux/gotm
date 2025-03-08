@@ -30,6 +30,7 @@ import (
 	"github.com/facette/natsort"
 ) // }}}
 
+// NaturalSort sorts tasks (ts) naturally
 func NaturalSort(ts []models.Task) {
 	slices.SortFunc(ts, func(a, b models.Task) int {
 		if natsort.Compare(a.Description, b.Description) {
@@ -42,6 +43,7 @@ func NaturalSort(ts []models.Task) {
 	})
 }
 
+// CreatedAsc sorts tasks (ts) and sorts them based on the created field in ascending order
 func CreatedAsc(ts []models.Task) {
 	slices.SortFunc(ts, func(a, b models.Task) int {
 		return a.Created.Compare(b.Created)
