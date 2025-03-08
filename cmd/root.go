@@ -38,8 +38,7 @@ import (
 ) // }}}
 
 var (
-	cfgFileFlag   string
-	// workspaceFlag string
+	cfgFileFlag string
 
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd = &cobra.Command{
