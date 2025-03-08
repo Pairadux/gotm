@@ -40,7 +40,7 @@ var listCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"l"},
 	Short:   "List items from Gotm",
-	Long:    `List Items from Gotm with some other information listed as well`,
+	Long:    `List items from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.DebugMessage(fmt.Sprintf("List called"))
 
