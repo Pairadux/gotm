@@ -122,7 +122,7 @@ func initConfig() { // {{{
 	completedPath := filepath.Join(appDataDir, "completed.json")
 	viper.SetDefault("active_path", activePath)
 	viper.SetDefault("completed_path", completedPath)
-	viper.SetDefault("default_workspace", "inbox")
+	// viper.SetDefault("default_workspace", "inbox")
 	viper.SetDefault("default_sorting_method", "natural")
 
 	viper.AutomaticEnv() // read in environment variables that match
