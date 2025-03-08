@@ -39,7 +39,7 @@ import (
 
 var (
 	cfgFileFlag   string
-	workspaceFlag string
+	// workspaceFlag string
 
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd = &cobra.Command{
@@ -83,7 +83,7 @@ func init() { // {{{
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFileFlag, "config", "", "config file (default is $HOME/.gotm.yaml)")
-	rootCmd.PersistentFlags().StringVar(&workspaceFlag, "workspace", "", "workspace to use (default is inbox)")
+	// rootCmd.PersistentFlags().StringVar(&workspaceFlag, "workspace", "", "workspace to use (default is inbox)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

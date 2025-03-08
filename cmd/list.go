@@ -45,9 +45,10 @@ var listCmd = &cobra.Command{
 		utility.DebugMessage(fmt.Sprintf("List called"))
 
 		active := taskops.InitActive()
-		workspace := utility.ResolveWorkspace(cmd)
+		workspace, err := cmd.Flags().GetString("workspace")
+		cobra.CheckErr(err)
 
-		err := utility.ValidateWorkspace(active, workspace)
+		err = utility.ValidateWorkspace(active, workspace)
 		cobra.CheckErr(err)
 
 		tasks := active.Workspaces[workspace].Tasks
@@ -90,6 +91,7 @@ func init() { // {{{
 	// and all subcommands, e.g.:
 	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
 
+	listCmd.Flags().StringP("workspace", "w", "inbox", "workspace to use (default is inbox)")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

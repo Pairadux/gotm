@@ -50,9 +50,10 @@ var completeCmd = &cobra.Command{
 		utility.DebugMessage(fmt.Sprintf("Complete called"))
 
 		all := taskops.InitAll()
-		workspace := utility.ResolveWorkspace(cmd)
+		workspace, err := cmd.Flags().GetString("workspace")
+		cobra.CheckErr(err)
 
-		err := utility.ValidateWorkspace(all.Active, workspace)
+		err = utility.ValidateWorkspace(all.Active, workspace)
 		cobra.CheckErr(err)
 
 		if err = utility.ValidateWorkspace(all.Completed, workspace); err != nil {
@@ -90,6 +91,7 @@ func init() { // {{{
 	// and all subcommands, e.g.:
 	// completeCmd.PersistentFlags().String("foo", "", "A help for foo")
 
+	completeCmd.Flags().StringP("workspace", "w", "inbox", "workspace to use (default is inbox)")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// completeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

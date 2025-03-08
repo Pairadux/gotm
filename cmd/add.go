@@ -51,7 +51,8 @@ var addCmd = &cobra.Command{
 		utility.DebugMessage(fmt.Sprintf("Add called"))
 
 		active := taskops.InitActive()
-		workspace := utility.ResolveWorkspace(cmd)
+		workspace, err := cmd.Flags().GetString("workspace")
+		cobra.CheckErr(err)
 
 		if err := utility.ValidateWorkspace(active, workspace); err != nil {
 			reader := bufio.NewReader(os.Stdin)
@@ -89,6 +90,7 @@ func init() { // {{{
 	// and all subcommands, e.g.:
 	// addCmd.PersistentFlags().String("foo", "", "A help for foo")
 
+	addCmd.Flags().StringP("workspace", "w", "inbox", "workspace to use (default is inbox)")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
