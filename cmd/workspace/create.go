@@ -26,22 +26,35 @@ package workspace
 import (
 	"fmt"
 
+	"github.com/Pairadux/gotm/internal/storage"
+	"github.com/Pairadux/gotm/internal/taskops"
+	"github.com/Pairadux/gotm/internal/utility"
+
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 ) // }}}
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create",
+	Use:     "create",
 	Aliases: []string{"c"},
-	Short: "Create a workspace in Gotm",
-	Long:  `Create a workspace in Gotm with some other information listed as well`,
 	Args:    cobra.ExactArgs(1),
+	Short:   "Create a workspace in Gotm",
+	Long:    `Create a workspace in Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("create called")
+		utility.DebugMessage("Create called")
+
+		active := taskops.InitActive()
+		workspace := args[0]
+
+		taskops.CreateWorkspace(*active, workspace)
+
+		storage.SaveTasksToFile(viper.GetString("active_path"), active)
+		utility.DebugMessage(fmt.Sprintf("\nTasks saved to json file: %s", viper.GetString("active_path")))
 	},
 }
 
-func init() {
+func init() {// {{{
 	WorkspaceCmd.AddCommand(createCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -53,4 +66,4 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
+}// }}}

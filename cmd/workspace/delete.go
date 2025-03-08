@@ -22,26 +22,39 @@ THE SOFTWARE.
 
 package workspace
 
-// LICENSE {{{
+// IMPORTS {{{
 import (
 	"fmt"
 
+	"github.com/Pairadux/gotm/internal/storage"
+	"github.com/Pairadux/gotm/internal/taskops"
+	"github.com/Pairadux/gotm/internal/utility"
+
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 ) // }}}
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete",
+	Use:     "delete",
 	Aliases: []string{"d"},
 	Args:    cobra.ExactArgs(1),
-	Short: "Delete a workspace from Gotm",
-	Long:  `Delete a workspace from Gotm with some other information listed as well`,
+	Short:   "Delete a workspace from Gotm",
+	Long:    `Delete a workspace from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("delete called")
+		utility.DebugMessage("Delete called")
+
+		active := taskops.InitActive()
+		workspace := args[0]
+
+		taskops.DeleteWorkspace(*active, workspace)
+
+		storage.SaveTasksToFile(viper.GetString("active_path"), active)
+		utility.DebugMessage(fmt.Sprintf("\nTasks saved to json file: %s", viper.GetString("active_path")))
 	},
 }
 
-func init() {
+func init() {// {{{
 	WorkspaceCmd.AddCommand(deleteCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -53,4 +66,4 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// deleteCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
+}// }}}

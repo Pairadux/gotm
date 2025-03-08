@@ -123,6 +123,20 @@ func Sort(sortType string, tasks []models.Task) {
 	}
 }
 
+// CreateWorkspace takes a workspace and a taskState and creates the workspace and adds it to the taskState.
+func CreateWorkspace(taskState models.TaskState, workspace string) {
+	taskState.Workspaces[workspace] = &models.Workspace{
+		Name:         workspace,
+		LastModified: time.Now(),
+		Tasks:        []models.Task{},
+	}
+}
+
+// DeleteWorkspace takes a workspace and a taskState and deletes the workspace from the taskState.
+func DeleteWorkspace(taskState models.TaskState, workspace string) {
+	delete(taskState.Workspaces, workspace)
+}
+
 func PrintActive(tasks []models.Task) {
 	r := strings.Repeat
 	fmt.Printf("\n%-5s │ %-40s │ %s\n", "Index", "Description", "Created")
