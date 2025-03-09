@@ -42,6 +42,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"l"},
+	Args:    cobra.MaximumNArgs(1),
 	Short:   "List items from Gotm",
 	Long:    `List items from Gotm with some other information listed as well`,
 	Run: func(cmd *cobra.Command, args []string) {
