@@ -143,5 +143,5 @@ func list(taskType string, workspace string, sortType string) {
 	taskops.Sort(tasks, sortType)
 	printTasks(tasks)
 
-	storage.SaveTasksToFile(filepath, &taskState)		
+	storage.SaveTasksToFile(filepath, &taskState)
 }
