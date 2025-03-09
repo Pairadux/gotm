@@ -39,12 +39,12 @@ func ToJson(taskState *models.TaskState) []byte {
 	return data
 }
 
-func SaveTasksToFile(filename string, taskState *models.TaskState) error {
-	tempFile := filename + ".tmp"
+func SaveTasksToFile(filepath string, taskState *models.TaskState) error {
+	tempFile := filepath + ".tmp"
 	if err := os.WriteFile(tempFile, ToJson(taskState), 0644); err != nil {
 		return err
 	}
-	return os.Rename(tempFile, filename)
+	return os.Rename(tempFile, filepath)
 }
 
 func Load(filename string) (*models.TaskState, error) {

@@ -97,6 +97,10 @@ func Complete(appState models.AppState, workspace string, index int) (models.App
 	return appState, false
 }
 
+func GetTasks(taskState models.TaskState, workspace string) []models.Task {
+	return taskState.Workspaces[workspace].Tasks
+}
+
 func Remove(tasks *[]models.Task, index int) (models.Task, bool) {
 	for i, t := range *tasks {
 		if t.Index == index {
@@ -108,7 +112,7 @@ func Remove(tasks *[]models.Task, index int) (models.Task, bool) {
 	return models.Task{}, false
 }
 
-func Sort(sortType string, tasks []models.Task) {
+func Sort(tasks []models.Task, sortType string) {
 	switch sortType {
 	case "natural", "nat":
 		// fmt.Printf("Sorting with: natural sort\n\n")
@@ -137,11 +141,3 @@ func DeleteWorkspace(taskState models.TaskState, workspace string) {
 	delete(taskState.Workspaces, workspace)
 }
 
-func PrintActive(tasks []models.Task) {
-	r := strings.Repeat
-	fmt.Printf("\n%-5s │ %-40s │ %s\n", "Index", "Description", "Created")
-	fmt.Printf("%s┼%s┼%s\n", r("─", 6), r("─", 42), r("─", 20))
-	for _, e := range tasks {
-		fmt.Printf("%-5d │ %-40.40s │ %s\n", e.Index, e.Description, e.Created.Format(time.DateTime))
-	}
-}
