@@ -25,7 +25,10 @@ package cmd
 // IMPORTS {{{
 import (
 	"fmt"
+	"strings"
+	"time"
 
+	"github.com/Pairadux/gotm/internal/models"
 	"github.com/Pairadux/gotm/internal/storage"
 	"github.com/Pairadux/gotm/internal/taskops"
 	"github.com/Pairadux/gotm/internal/utility"
@@ -44,35 +47,25 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.DebugMessage(fmt.Sprintf("List called"))
 
-		active := taskops.InitActive()
+		listType := "active"
+		if len(args) > 0 {
+			listType = args[0]
+		}
+
 		workspace, err := cmd.Flags().GetString("workspace")
 		cobra.CheckErr(err)
 
-		err = utility.ValidateWorkspace(active, workspace)
-		cobra.CheckErr(err)
-
-		tasks := active.Workspaces[workspace].Tasks
-
-		if len(args) > 0 {
-			switch args[0] {
-			case "all":
-				fmt.Printf("all")
-			case "active":
-				fmt.Printf("active")
-			case "completed":
-				fmt.Printf("completed")
-			default:
-				fmt.Printf("default")
-			}
-		}
-
 		sortType := viper.GetString("default_sorting_method")
 
-		taskops.Sort(sortType, tasks)
+		switch listType {
+		case "all":
+			listAll(workspace, sortType)
+		case "completed", "complete", "c":
+			list("completed", workspace, sortType)
+		default:
+			list("active", workspace, sortType)
+		}
 
-		taskops.PrintActive(tasks)
-
-		storage.SaveTasksToFile(viper.GetString("active_path"), active)
 		utility.DebugMessage(fmt.Sprintf("\nTasks saved to json file: %s", viper.GetString("active_path")))
 	},
 }
@@ -96,3 +89,59 @@ func init() { // {{{
 	// is called directly, e.g.:
 	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 } // }}}
+
+func printTasks(tasks []models.Task) {
+	r := strings.Repeat
+	fmt.Printf("%-5s │ %-40s │ %s\n", "Index", "Description", "Created")
+	fmt.Printf("%s┼%s┼%s\n", r("─", 6), r("─", 42), r("─", 20))
+	for _, e := range tasks {
+		fmt.Printf("%-5d │ %-40.40s │ %s\n", e.Index, e.Description, e.Created.Format(time.DateTime))
+	}
+}
+
+func listAll(workspace string, sortType string) {
+	all := taskops.InitAll()
+
+	err := utility.ValidateWorkspace(all.Active, workspace)
+	cobra.CheckErr(err)
+	err = utility.ValidateWorkspace(all.Completed, workspace)
+	cobra.CheckErr(err)
+
+	activeTasks := taskops.GetTasks(*all.Active, workspace)
+	fmt.Println("Active Tasks")
+	taskops.Sort(activeTasks, sortType)
+	printTasks(activeTasks)
+
+	completedTasks := taskops.GetTasks(*all.Completed, workspace)
+	fmt.Println("\nCompleted Tasks")
+	taskops.Sort(completedTasks, sortType)
+	printTasks(completedTasks)
+
+	storage.SaveTasksToFile(viper.GetString("active_path"), all.Active)
+	storage.SaveTasksToFile(viper.GetString("completed_path"), all.Completed)
+}
+
+func list(taskType string, workspace string, sortType string) {
+	var tasks []models.Task
+	var taskState models.TaskState
+	var filepath string
+
+	utility.DebugMessage(fmt.Sprintf("%s tasks", taskType))
+
+	if taskType == "completed" {
+		taskState = *taskops.InitCompleted()
+		filepath = viper.GetString("completed_path")
+	} else {
+		taskState = *taskops.InitActive()
+		filepath = viper.GetString("active_path")
+	}
+
+	err := utility.ValidateWorkspace(&taskState, workspace)
+	cobra.CheckErr(err)
+
+	tasks = taskops.GetTasks(taskState, workspace)
+	taskops.Sort(tasks, sortType)
+	printTasks(tasks)
+
+	storage.SaveTasksToFile(filepath, &taskState)		
+}
