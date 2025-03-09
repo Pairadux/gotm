@@ -32,7 +32,7 @@ import (
 ) // }}}
 
 func ToJson(taskState *models.TaskState) []byte {
-	data, err := json.MarshalIndent(taskState, "", "  ")
+	data, err := json.Marshal(taskState)
 	if err != nil {
 		panic(err)
 	}
