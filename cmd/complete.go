@@ -91,8 +91,7 @@ func init() { // {{{
 	// and all subcommands, e.g.:
 	// completeCmd.PersistentFlags().String("foo", "", "A help for foo")
 
-	completeCmd.Flags().StringP("workspace", "w", "inbox", "workspace to use (default is inbox)")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// completeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	completeCmd.Flags().StringP("workspace", "w", "inbox", "workspace to use (default is inbox)")
 } // }}}
