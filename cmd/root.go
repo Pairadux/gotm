@@ -55,7 +55,7 @@ var (
 			}
 
 			// TUI PROGRAM
-			p := tea.NewProgram(tui.InitModel(utility.ResolveWorkspace(cmd)))
+			p := tea.NewProgram(tui.InitialModel(), tea.WithAltScreen())
 			if _, err := p.Run(); err != nil {
 				fmt.Printf("There's been an error: %v", err)
 				os.Exit(1)
