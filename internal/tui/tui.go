@@ -41,11 +41,11 @@ import (
 
 // Model represents the application state
 type Model struct {
-	workspaces    list.Model
-	tasks         table.Model
-	activePane    int // 0 for workspaces, 1 for tasks
-	windowWidth   int
-	windowHeight  int
+	workspaces   list.Model
+	tasks        table.Model
+	activePane   int // 0 for workspaces, 1 for tasks
+	windowWidth  int
+	windowHeight int
 }
 
 // Workspace is a group of tasks
@@ -71,13 +71,13 @@ func (w Workspace) FilterValue() string { return w.title }
 
 // Define keyboard mappings
 type keyMap struct {
-	Up     key.Binding
-	Down   key.Binding
-	Left   key.Binding
-	Right  key.Binding
-	Tab    key.Binding
-	Enter  key.Binding
-	Quit   key.Binding
+	Up    key.Binding
+	Down  key.Binding
+	Left  key.Binding
+	Right key.Binding
+	Tab   key.Binding
+	Enter key.Binding
+	Quit  key.Binding
 }
 
 var keys = keyMap{
@@ -114,37 +114,36 @@ var keys = keyMap{
 // Style definitions
 var (
 	baseStyle = lipgloss.NewStyle().
-		BorderStyle(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("240")).
-		Padding(0, 0, 0, 0)
+			BorderStyle(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("240")).
+			Padding(0, 0, 0, 0)
 
 	workspaceStyle = baseStyle.
-		BorderForeground(lipgloss.Color("36"))
+			BorderForeground(lipgloss.Color("36"))
 
 	taskStyle = baseStyle.
-		BorderForeground(lipgloss.Color("63"))
+			BorderForeground(lipgloss.Color("63"))
 
 	focusedWorkspaceStyle = workspaceStyle.
-		BorderForeground(lipgloss.Color("86"))
+				BorderForeground(lipgloss.Color("86"))
 
 	focusedTaskStyle = taskStyle.
-		BorderForeground(lipgloss.Color("87"))
+				BorderForeground(lipgloss.Color("87"))
 
 	titleStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("86")).
-		Bold(true).
-		MarginLeft(1)
+			Foreground(lipgloss.Color("86")).
+			Bold(true).
+			MarginLeft(1)
 
 	statusBar = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("241")).
-		MarginTop(1)
-		
+			Foreground(lipgloss.Color("241")).
+			MarginTop(1)
+
 	appStyle = lipgloss.NewStyle().
-		Padding(1, 2)
+			Padding(1, 2)
 )
 
 // Initialize the model
-func InitialModel() Model {
 	// Sample data
 	workspaces := []list.Item{
 		Workspace{title: "Personal", id: 1, tasks: []Task{}},
@@ -256,7 +255,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.windowHeight = msg.Height
 
 		// Account for padding and borders
-		contentWidth := msg.Width - 4  // -4 for horizontal padding/margins
+		contentWidth := msg.Width - 4   // -4 for horizontal padding/margins
 		contentHeight := msg.Height - 4 // -4 for vertical padding/margins
 
 		// Calculate widths
@@ -269,7 +268,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// Update table height and width
 		m.tasks.SetHeight(contentHeight - 4)
-		
+
 		// Update column widths
 		columns := m.tasks.Columns()
 		columns[1].Width = tasksWidth - columns[0].Width - columns[2].Width - columns[3].Width - 10
@@ -307,7 +306,7 @@ func (m Model) View() string {
 	// Calculate dimensions accounting for borders and padding
 	contentWidth := m.windowWidth - 4
 	contentHeight := m.windowHeight - 4
-	
+
 	workspaceWidth := contentWidth/4 - 2
 	taskWidth := contentWidth - workspaceWidth - 6
 
@@ -324,7 +323,7 @@ func (m Model) View() string {
 
 	// Add help text at the bottom
 	help := statusBar.Render("j/k: navigate • tab: switch pane • enter: select • q: quit")
-	
+
 	// Apply overall app padding and return
 	return appStyle.Render(
 		lipgloss.JoinVertical(lipgloss.Left, layout, help),
