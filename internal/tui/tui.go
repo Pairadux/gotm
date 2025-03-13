@@ -32,6 +32,7 @@ import (
 	// "github.com/Pairadux/gotm/internal/models"
 	// "github.com/Pairadux/gotm/internal/taskops"
 
+	"github.com/Pairadux/gotm/internal/models"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/table"
@@ -49,10 +50,9 @@ type Model struct {
 }
 
 // Workspace is a group of tasks
-type Workspace struct {
-	title string
-	id    int
-	tasks []Task
+type WorkspaceItem struct {
+	workspace *models.Workspace
+	name string
 }
 
 // Task represents a single task
@@ -65,9 +65,9 @@ type Task struct {
 }
 
 // Implement the list.Item interface for Workspace
-func (w Workspace) Title() string       { return w.title }
-func (w Workspace) Description() string { return fmt.Sprintf("%d tasks", len(w.tasks)) }
-func (w Workspace) FilterValue() string { return w.title }
+func (w WorkspaceItem) Title() string       { return w.name }
+func (w WorkspaceItem) Description() string { return fmt.Sprintf("%d tasks", len(w.workspace.Tasks)) }
+func (w WorkspaceItem) FilterValue() string { return w.name }
 
 // Define keyboard mappings
 type keyMap struct {
@@ -144,17 +144,18 @@ var (
 )
 
 // Initialize the model
-	// Sample data
-	workspaces := []list.Item{
-		Workspace{title: "Personal", id: 1, tasks: []Task{}},
-		Workspace{title: "Work", id: 2, tasks: []Task{}},
-		Workspace{title: "Side Projects", id: 3, tasks: []Task{}},
-		Workspace{title: "Learning", id: 4, tasks: []Task{}},
-		Workspace{title: "Health", id: 5, tasks: []Task{}},
+func InitialModel(taskState models.TaskState, activeWorkspace string) Model {
+
+	workspaceItems := []list.Item{}
+	for name, workspace := range taskState.Workspaces {
+		workspaceItems = append(workspaceItems, WorkspaceItem{
+			workspace: workspace,
+			name: name,
+		})
 	}
 
 	// Initialize workspaces list
-	workspaceList := list.New(workspaces, list.NewDefaultDelegate(), 0, 0)
+	workspaceList := list.New(workspaceItems, list.NewDefaultDelegate(), 0, 0)
 	workspaceList.Title = "Workspaces"
 	workspaceList.SetShowHelp(false)
 	workspaceList.SetShowStatusBar(false)
@@ -164,15 +165,25 @@ var (
 	// Initialize tasks table
 	columns := []table.Column{
 		{Title: "ID", Width: 4},
-		{Title: "Title", Width: 30},
-		{Title: "Status", Width: 10},
-		{Title: "Priority", Width: 8},
+		{Title: "Description", Width: 50},
+		{Title: "Created", Width: 12},
+		{Title: "Status", Width: 8},
 	}
 
-	rows := []table.Row{
-		{"1", "Complete the TUI application", "Todo", "High"},
-		{"2", "Add persistence layer", "Todo", "Medium"},
-		{"3", "Implement task filtering", "Todo", "Low"},
+	rows := []table.Row{}
+	if activeWorkspace != "" && taskState.Workspaces[activeWorkspace] != nil {
+		for _, task := range taskState.Workspaces[activeWorkspace].Tasks {
+			status := "Todo"
+			if task.Completed {
+				status = "Done"
+			}
+			rows = append(rows, table.Row{
+				fmt.Sprintf("%d", task.Index),
+				task.Description,
+				task.Created.Format("2006-01-02"),
+				status,
+			})
+		}
 	}
 
 	taskTable := table.New(
@@ -238,14 +249,23 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				// Handle workspace selection
 				i := m.workspaces.Index()
 				if i != -1 {
-					workspace := m.workspaces.Items()[i].(Workspace)
-					// Here we would update tasks based on the selected workspace
-					// For now, we'll just update the title
-					m.tasks.SetRows([]table.Row{
-						{"1", fmt.Sprintf("Task 1 in %s", workspace.title), "Todo", "High"},
-						{"2", fmt.Sprintf("Task 2 in %s", workspace.title), "In Progress", "Medium"},
-						{"3", fmt.Sprintf("Task 3 in %s", workspace.title), "Done", "Low"},
-					})
+					workspaceItem := m.workspaces.Items()[i].(WorkspaceItem)
+					workspace := workspaceItem.workspace
+
+					rows := []table.Row{}
+					for _, task := range workspace.Tasks {
+						status := "Todo"
+						if task.Completed {
+							status = "Done"
+						}
+						rows = append(rows, table.Row{
+							fmt.Sprintf("%d", task.Index),
+							task.Description,
+							task.Created.Format("2006-01-02"),
+							status,
+						})
+					}
+					m.tasks.SetRows(rows)
 				}
 			}
 		}

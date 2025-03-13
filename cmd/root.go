@@ -29,6 +29,7 @@ import (
 	"path/filepath"
 
 	"github.com/Pairadux/gotm/cmd/workspace"
+	"github.com/Pairadux/gotm/internal/taskops"
 	"github.com/Pairadux/gotm/internal/tui"
 	"github.com/Pairadux/gotm/internal/utility"
 
@@ -54,8 +55,14 @@ var (
 				defer f.Close()
 			}
 
+			appState := taskops.InitAll()
+
+			activeWorkspace := "inbox"
+
+			model := tui.InitialModel(*appState.Active, activeWorkspace)
+
 			// TUI PROGRAM
-			p := tea.NewProgram(tui.InitialModel(), tea.WithAltScreen())
+			p := tea.NewProgram(model, tea.WithAltScreen())
 			if _, err := p.Run(); err != nil {
 				fmt.Printf("There's been an error: %v", err)
 				os.Exit(1)
